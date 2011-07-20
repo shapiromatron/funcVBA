@@ -146,7 +146,7 @@ Function StudentTText_EqualVar(ByVal ControlMean As Double, _
                                 ByVal DoseSD As Double, _
                                 ByVal DoseN As Integer) As Double
     '----------------------------------------------------------------
-    ' StudentTText_UnequalVar   - Calculates a student t-test with equal sample size and
+    ' StudentTText_EqualVar     - Calculates a student t-test with equal sample size and
     '                             equal variance, using a mean and standard deviation for
     '                             two distributions
     '                           - In : ControlMean As Double, ControlSD As Double, ControlN As Integer,
