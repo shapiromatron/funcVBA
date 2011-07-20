@@ -1,1 +1,1 @@
-<Project name="Batch"></Project>
+<Project name="Batch"><Folder name="Commands"><File path="Batch\Commands.bat"></File></Folder></Project>
