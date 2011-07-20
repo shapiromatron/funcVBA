@@ -1,6 +1,4 @@
 
 C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>cd C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library\ 
 
-C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>call git add -f . 
-
-C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>call git commit -a -m "testing" 
+C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>git add -f .   && git commit -a -m "added .BAT commands" 
