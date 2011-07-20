@@ -3,4 +3,4 @@ C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>cd C:\Doc
 
 C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>call git add -f . 
 
-C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>call git commit -a -m "blah" 
+C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>call git commit -a -m "testing" 
