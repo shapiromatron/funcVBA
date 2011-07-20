@@ -10,6 +10,47 @@ End Enum
 '   |   NEW FUNCTIONS TO BE PROPERLY QA/QC AND CATEGORIZED                          |
 '   \-------------------------------------------------------------------------------/
 
+Function FormatNumberToPrint(ByVal Number As Double) As String
+    Dim NumAfterDecimal As Double
+    Dim ConvertedText As String
+    Dim ShowDec As String
+    
+	'DON'T ADD PRECISION WHEN THERE ISN'T ANY
+    NumAfterDecimal = InStr(1, CStr(Number), ".")
+    If NumAfterDecimal > 0 Then
+        NumAfterDecimal = Len(CStr(Number)) - NumAfterDecimal
+        ShowDec = "."
+    Else
+        ShowDec = ""
+    End If
+    
+    Select Case Number
+		Case 0
+            ConvertedText = "0"
+        Case Is > 100000
+            ConvertedText = Format(Number, "0.0E+00")
+        Case Is > 10000
+            ConvertedText = Format((Number), "0,000")
+        Case Is > 1000  'and < 10,000
+            ConvertedText = Format((Number), "0,000")
+        Case Is > 100   'and < 1,000
+            ConvertedText = Format(Number, "0")
+        Case Is > 10    'and < 100
+            ConvertedText = Format(Number, "0" & ShowDec & WorksheetFunction.Rept("0", WorksheetFunction.Min(1, NumAfterDecimal)))
+        Case Is > 1     'and < 10
+            ConvertedText = Format(Number, "0" & ShowDec & WorksheetFunction.Rept("0", WorksheetFunction.Min(2, NumAfterDecimal)))
+        Case Is > 0.1   'and < 1
+            ConvertedText = Format(Number, "0." & WorksheetFunction.Rept("0", WorksheetFunction.Min(3, NumAfterDecimal)))
+        Case Is > 0.01  'and < 0.1
+            ConvertedText = Format(Number, "0." & WorksheetFunction.Rept("0", WorksheetFunction.Min(4, NumAfterDecimal)))
+        Case Is > 0.001 'and < 0.01
+            ConvertedText = Format(Number, "0." & WorksheetFunction.Rept("0", WorksheetFunction.Min(5, NumAfterDecimal)))
+        Case Else   ' <= 0.001
+            ConvertedText = Format(Number, "0.00E+00")
+    End Select
+    FormatNumberToPrint = ConvertedText
+End Function
+
 Function DateLastModified(ByVal FN As String) As String
     '-----------------------------------------------------------------------------------------------------------
     ' DateLastModified   - Returns the last date an item was modified
