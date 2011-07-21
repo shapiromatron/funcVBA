@@ -11,7 +11,6 @@
 :: SYNTAX TIPS:
 :: -----------------------------------------
 :: ">" pushes all batch output from command to text file
-::  example dir > dir.txt
 :: "&" wait for commmand to complete before continuing
 :: "&&" wait for command to complete succesfully before continuing
 
@@ -23,6 +22,7 @@ FOR /D /r %%G IN ("*") DO xcopy "%%G\*.*" "%~dp0"
 
 :: GRAB ALL PDF FILES IN FOLDER, MOVE TO ROOT:
 :: -----------------------------------------
+@echo off
 FOR /D /r %%G IN ("*") DO xcopy "%%G\*.pdf" "%~dp0"
 
 :: SEND OUTPUT OF BATCH FILE TO A TEXT FILE:
