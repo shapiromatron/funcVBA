@@ -1,6 +1,8 @@
 Attribute VB_Name = "z_Excel"
 Option Explicit
 
+'revised
+
 Enum Tbl_LookupReturn
         '----------------------------------------------------------------
         ' Tbl_LookupReturn    - Used with Function Tbl_Lookup
