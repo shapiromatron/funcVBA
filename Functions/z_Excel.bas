@@ -1,7 +1,4 @@
-Attribute VB_Name = "z_Excel"
 Option Explicit
-
-'revised
 
 Enum Tbl_LookupReturn
         '----------------------------------------------------------------
@@ -584,9 +581,9 @@ End Function
 '****************************************************
 
 Public Function Tbl_Lookup(Tbl As Range, _
-                                                        ReturnColumnName As String, _
-                                                        LookupReturn As Tbl_LookupReturn, _
-                                                        ParamArray SearchCriteria() As Variant) As Variant
+                           ReturnColumnName As String, _
+                           LookupReturn As Tbl_LookupReturn, _
+                           ParamArray SearchCriteria() As Variant) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' Tbl_Lookup         - Returns a collection or a single value of matches that equal each SearchCritiera
         '                       This is a substitute to the INDEX/MATCH or SUMPRODUCT method of match multiple criteria
@@ -957,65 +954,103 @@ End Function
 '****************************************************
 
 Public Function Range_CopyPasteValues(CopyRange As Range, PasteRange As Range) As Variant
-        '-----------------------------------------------------------------------------------------------------------
-        ' Range_CopyPasteValues - Copies and pastes values only
-        '                       - In : CopyRange As Range
-        '                               PasteRange As Range
-        '                       - Last Updated: 7/4/11 by AJS
-        '-----------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
-        PasteRange.Value = CopyRange.Value
-        Range_CopyPasteValues = True
-        Exit Function
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_CopyPasteValues - Copies and pastes values only
+    '                       - In : CopyRange As Range
+    '                               PasteRange As Range
+    '                       - Last Updated: 7/4/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError
+    PasteRange.Value = CopyRange.Value
+    Range_CopyPasteValues = True
+    Exit Function
 IsError:
-        Range_CopyPasteValues = CVErr(xlErrNA)
-        Debug.Print "Error in Range_CopyPasteValues: " & Err.Number & ": " & Err.Description
+    Range_CopyPasteValues = CVErr(xlErrNA)
+    Debug.Print "Error in Range_CopyPasteValues: " & Err.Number & ": " & Err.Description
 End Function
 
 Public Function Range_CopyPasteAll(CopyRange As Range, PasteRange As Range) As Variant
-        '-----------------------------------------------------------------------------------------------------------
-        ' Range_CopyPasteAll    - Copies and pastes everything, including formatting
-        '                           Known bug- only copies and pastes visible cells
-        '                       - In : CopyRange As Range
-        '                               PasteRange As Range
-        '                       - Last Updated: 7/4/11 by AJS
-        '-----------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
-        CopyRange.Copy
-        PasteRange.PasteSpecial (xlPasteAll)
-        Application.CutCopyMode = False
-        Range_CopyPasteAll = True
-        Exit Function
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_CopyPasteAll    - Copies and pastes everything, including formatting
+    '                           Known bug- only copies and pastes visible cells
+    '                       - In : CopyRange As Range
+    '                               PasteRange As Range
+    '                       - Last Updated: 7/4/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError
+    CopyRange.Copy
+    PasteRange.PasteSpecial (xlPasteAll)
+    Application.CutCopyMode = False
+    Range_CopyPasteAll = True
+    Exit Function
 IsError:
-        Range_CopyPasteAll = CVErr(xlErrNA)
-        Debug.Print "Error in Range_CopyPasteAll: " & Err.Number & ": " & Err.Description
+    Range_CopyPasteAll = CVErr(xlErrNA)
+    Debug.Print "Error in Range_CopyPasteAll: " & Err.Number & ": " & Err.Description
 End Function
 
 Public Function Range_Sort(wsRange As Range, RangeIncludesHeader As Boolean) As Variant
-        '-----------------------------------------------------------------------------------------------------------
-        ' Range_Sort         - Sorts the selected range, w/ or w/o header
-        '                    - In : wsRange As Range, Header As Boolean
-        '                    - Last Updated: 3/9/11 by AJS
-        '-----------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
-        Dim HeaderType As Integer
-        Select Case RangeIncludesHeader
-                Case True
-                        HeaderType = 1
-                Case False
-                        HeaderType = 2
-        End Select
-        wsRange.Sort Key1:=wsRange.Cells(1), _
-                        Order1:=xlAscending, _
-                        Header:=HeaderType, _
-                        MatchCase:=False, _
-                        Orientation:=xlTopToBottom, _
-                        DataOption1:=xlSortNormal
-        Range_Sort = True
-        Exit Function
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_Sort         - Sorts the selected range, w/ or w/o header
+    '                    - In : wsRange As Range, Header As Boolean
+    '                    - Last Updated: 3/9/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError
+    Dim HeaderType As Integer
+    Select Case RangeIncludesHeader
+            Case True
+                    HeaderType = 1
+            Case False
+                    HeaderType = 2
+    End Select
+    wsRange.Sort Key1:=wsRange.Cells(1), _
+                    Order1:=xlAscending, _
+                    Header:=HeaderType, _
+                    MatchCase:=False, _
+                    Orientation:=xlTopToBottom, _
+                    DataOption1:=xlSortNormal
+    Range_Sort = True
+    Exit Function
 IsError:
-        Range_Sort = False
-        Debug.Print "Error in Range_Sort: " & Err.Number & ": " & Err.Description
+    Range_Sort = False
+    Debug.Print "Error in Range_Sort: " & Err.Number & ": " & Err.Description
+End Function
+
+Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_ConvertTo1DArray      Converts a range of values into a 1-D array
+    '                             In : InputRange As Range
+    '                             Last Updated: 7/28/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError
+    Dim eachCell As Range
+    Dim OutputArray() As Variant
+    Dim Counter As Long
+    
+    ReDim OutputArray(0 To InputRange.Cells.Count - 1)
+    Counter = 0
+    For Each eachCell In InputRange
+        OutputArray(Counter) = eachCell.Value
+        Counter = Counter + 1
+    Next
+    Range_ConvertTo1DArray = OutputArray
+    Exit Function
+IsError:
+        Range_ConvertTo1DArray = CvErr(XlNA)
+        Debug.Print "Error in Range_ConvertTo1DArray: " & Err.Number & ": " & Err.Description
+End Function
+
+Private Function Range_ConvertToArray(InputRange As Range) As Variant
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_ConvertToArray      Converts a range of values into an array, size number of rows x number of columns
+    '                           In : InputRange As Range
+    '                           Last Updated: 7/28/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError
+    Range_ConvertToArray = InputRange.Value2
+    Exit Function
+IsError:
+        Range_ConvertToArray = CvErr(XlNA)
+        Debug.Print "Error in Range_ConvertToArray: " & Err.Number & ": " & Err.Description
 End Function
 
 Public Function Range_FindMatch(SearchString As String, SearchRange As Range) As Variant

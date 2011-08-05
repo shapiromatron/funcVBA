@@ -2,7 +2,7 @@ Option Explicit
 
 Sub OpenAnyFileUsingDefaultProgram(FullFileName as String)
     '-----------------------------------------------------------------------------------------------------------
-    ' OpenAnyFileUsingDefaultProgram	- Tests to see if ProcessID is currently open
+    ' OpenAnyFileUsingDefaultProgram	- Opens any file on your computer using the default program
     '                  					- Last Updated: 7/14/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
 	' Requires the following system functions (declare at top of module): 	

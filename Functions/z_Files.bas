@@ -1,4 +1,3 @@
-Attribute VB_Name = "z_Files"
 Option Explicit
 
 Enum FileTypes
@@ -84,6 +83,7 @@ Public Function SelectExistingFolder(Optional MenuTitleName As String = "Select 
         Exit Function
 UserCancelled:
         SelectExistingFolder = False
+		Exit Function
 IsError:
         SelectExistingFolder = CVErr(xlErrNA)
         Debug.Print "Error in SelectExistingFolder: " & Err.Number & ": " & Err.Description

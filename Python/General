@@ -1,0 +1,48 @@
+import sys 
+
+#|-------------|
+#| DEBUG TIMER |
+#|-------------|
+class Timer:
+    def __init__(self, TimerName):
+        self.TimerName = TimerName
+        self.time1 = time.clock()
+    def StopTime(self):
+        self.time2 = time.clock()
+    def PrintTime(self):
+        print "%s: %f" % (self.TimerName, self.time2 - self.time1)
+        
+#|----------------|
+#| NUMPY FUNCTION |
+#|----------------|
+def NumpyArrayFn():
+    import numpy as np
+    
+    filetxt = np.array([1,2,3,4,5,6])    
+    filetxt.resize(10)
+    filetxt[:3] = 0
+    print PrintJoinedNumPyArray(",",filetxt)
+    
+    anotherfile = np.array([])
+    anotherfile = np.append(anotherfile,[1,2,3])
+    print PrintJoinedNumPyArray(",",anotherfile)
+    
+    return True
+
+#|------------------------|
+#| JOIN AND PRINT STRINGS |
+#|------------------------|
+def PrintJoinedNumPyArray(Delimeter, Array):
+    return str(Delimeter).join([str(value) for value in Array])
+
+#|-----------------------------------------------------------|
+#| ARGUMENT TO RUN FOR DEBUGGING CODE, TO RUN FROM SCRIPTING |
+#|-----------------------------------------------------------|
+def main(argv):
+    if len(argv) == 1:
+        NumpyArrayFn()
+    else:
+        print "usage_of_exposure: %s SOME_FOLDER" % argv[0]
+        
+if __name__ == '__main__':
+    main(sys.argv)
