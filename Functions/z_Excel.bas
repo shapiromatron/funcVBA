@@ -1,3 +1,4 @@
+Attribute VB_Name = "z_Excel"
 Option Explicit
 
 Enum Tbl_LookupReturn
@@ -193,7 +194,7 @@ End Function
 '*\-----------------------------------------/*
 '*********************************************
 
-Public Function Validation_DoesItExist(CellRange As Range) As Boolean
+Public Function Validation_DoesItExist(cellRange As Range) As Boolean
         '----------------------------------------------------------------
         ' Validation_DoesItExist    - Tests to determine if validation exists on a range
         '                           - In : CellRange As Range
@@ -201,7 +202,7 @@ Public Function Validation_DoesItExist(CellRange As Range) As Boolean
         '                           - Last Updated: 7/3/11 by AJS
         '----------------------------------------------------------------
         On Error GoTo IsError
-                If IsNumeric(CellRange.Validation.Type) Then Validation_DoesItExist = True
+                If IsNumeric(cellRange.Validation.Type) Then Validation_DoesItExist = True
         Exit Function
 IsError:
         Validation_DoesItExist = False
@@ -236,7 +237,7 @@ IsError:
         Debug.Print "Error in Validation_AddList: " & Err.Number & ": " & Err.Description
 End Function
 
-Public Function Validiation_DeleteAll(CellRange As Range) As Variant
+Public Function Validiation_DeleteAll(cellRange As Range) As Variant
         '---------------------------------------------------------------------------------
         ' Validiation_DeleteAll - Deletes all validation in selected range
         '                       - In : CellRange As Range
@@ -244,7 +245,7 @@ Public Function Validiation_DeleteAll(CellRange As Range) As Variant
         '                       - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
         On Error GoTo IsError
-        CellRange.Validation.Delete
+        cellRange.Validation.Delete
         Validiation_DeleteAll = True
         Exit Function
 IsError:
@@ -252,7 +253,7 @@ IsError:
         Debug.Print "Error in Validiation_DeleteAll: " & Err.Number & ": " & Err.Description
 End Function
 
-Public Function Validation_WholeNumber(CellRange As Range, _
+Public Function Validation_WholeNumber(cellRange As Range, _
                                                                         Min As Long, Max As Long, _
                                                                         Optional InputTitle As String = "Whole Numbers Only", _
                                                                         Optional InputInstructions As String = "") As Variant
@@ -267,7 +268,7 @@ Public Function Validation_WholeNumber(CellRange As Range, _
         '                        - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
         On Error GoTo IsError
-        With CellRange.Validation
+        With cellRange.Validation
                 .Delete
                 .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=Min, Formula2:=Max
                 .IgnoreBlank = True
@@ -286,7 +287,7 @@ IsError:
         Debug.Print "Error in Validation_WholeNumber: " & Err.Number & ": " & Err.Description
 End Function
 
-Public Function Validation_FreeText(CellRange As Range, _
+Public Function Validation_FreeText(cellRange As Range, _
                                                                         InputTitle As String, _
                                                                         InputInstructions As String) As Variant
         '---------------------------------------------------------------------------------
@@ -296,7 +297,7 @@ Public Function Validation_FreeText(CellRange As Range, _
         '                        - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
         On Error GoTo IsError
-        With CellRange.Validation
+        With cellRange.Validation
                 .Delete
                 .Add Type:=xlValidateInputOnly, AlertStyle:=xlValidAlertStop, Operator:=xlBetween
                 .IgnoreBlank = True
@@ -670,6 +671,10 @@ Public Function Tbl_ReturnUniqueList(SearchRange As Range) As Variant
         '                       - Out: A string collection of unique values
         '                       - Last Updated: 6/24/11 by AJS
         '-----------------------------------------------------------------------------------------------------------
+        ' Example call:
+        ' Dim ThisCollection as New Collection
+        ' Set ThisCollection = Tbl_ReturnUniqueList(SearchRange)
+        '-----------------------------------------------------------------------------------------------------------
         Dim EachRng As Range
         Dim UniqueCollection As New Collection
         Dim CollectionItem As Variant
@@ -1035,7 +1040,7 @@ Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     Range_ConvertTo1DArray = OutputArray
     Exit Function
 IsError:
-        Range_ConvertTo1DArray = CvErr(XlNA)
+        Range_ConvertTo1DArray = CVErr(XlNA)
         Debug.Print "Error in Range_ConvertTo1DArray: " & Err.Number & ": " & Err.Description
 End Function
 
@@ -1049,7 +1054,7 @@ Private Function Range_ConvertToArray(InputRange As Range) As Variant
     Range_ConvertToArray = InputRange.Value2
     Exit Function
 IsError:
-        Range_ConvertToArray = CvErr(XlNA)
+        Range_ConvertToArray = CVErr(XlNA)
         Debug.Print "Error in Range_ConvertToArray: " & Err.Number & ": " & Err.Description
 End Function
 

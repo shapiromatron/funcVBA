@@ -1,9 +1,5 @@
+Attribute VB_Name = "z_Strings"
 Option Explicit
-
-
-' ajs to start polishing here!
-
-
 
 Public Function AddNewLine(Optional Repeat As Integer = 1) As String
     '----------------------------------------------------
@@ -176,14 +172,27 @@ Public Function AddToArrayIfUnique(ByVal NewString As String, ArrayName() As Var
 
     Dim EachValue As Variant
     Dim Duplicate As Boolean
+    Dim ArrEmpty As Boolean
+    
+    ArrEmpty = False
+    On Error Resume Next
+    If UBound(ArrayName) = 0 Then ArrEmpty = True
+    On Error GoTo 0
+    
     Duplicate = False
-    For Each EachValue In ArrayName
-        If NewString = EachValue Then
-            Duplicate = True
-            Exit For
-        End If
-    Next
-    If Duplicate = False Then
+    If ArrEmpty = False Then
+        For Each EachValue In ArrayName
+            If NewString = EachValue Then
+                Duplicate = True
+                Exit For
+            End If
+        Next
+    End If
+    
+    If ArrEmpty = True Then
+        ReDim ArrayName(1 To 1)
+        ArrayName(1) = NewString
+    ElseIf Duplicate = False Then
         ReDim Preserve ArrayName(LBound(ArrayName()) To UBound(ArrayName()) + 1)
         ArrayName(UBound(ArrayName)) = NewString
     End If
