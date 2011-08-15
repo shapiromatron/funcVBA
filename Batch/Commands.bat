@@ -10,34 +10,29 @@
 
 :: SYNTAX TIPS:
 :: -----------------------------------------
-:: ">" pushes all batch output from command to text file
+:: ">" create new file; print all output to file
+:: ">>" append output to existing file or create new
 :: "&" wait for commmand to complete before continuing
 :: "&&" wait for command to complete succesfully before continuing
 
 :: GRAB ALL FILES IN FOLDER, MOVE TO ROOT:
-:: -----------------------------------------
 @echo off
 FOR /D /r %%G IN ("*") DO xcopy "%%G\*.*" "%~dp0"
 
 
 :: GRAB ALL PDF FILES IN FOLDER, MOVE TO ROOT:
-:: -----------------------------------------
 @echo off
 FOR /D /r %%G IN ("*") DO xcopy "%%G\*.pdf" "%~dp0"
 
 :: SEND OUTPUT OF BATCH FILE TO A TEXT FILE:
-:: -----------------------------------------
 :: BATCHFN.bat > OutputText.txt
 GITbat.bat > GITout.txt
 
 :: DELETE ALL FILES IN A DIRECTORY:
-:: -----------------------------------------
 :: @echo off
 :: FOR /D %%G IN ("*") DO rmdir /S /Q "%%G"
 
-
 :: DELETE ONE FILE
-::------------------------------------------
 DEL outputfile.txt
 
 :: CHANGE DIRECTORY AND DRIVE AT ONCE:
@@ -59,40 +54,10 @@ git add -f . && git commit -a -m "%Input%" >> %OutputFile%
 START %OutputFile%
 
 :: BEEP
-::------------------------------------------
 
 
-::#==================#
-::#   ZIP COMMANDS   #
-::#==================#
+:: WAIT FOR A NUMBER OF MILLISECONDS
+PING 1.1.1.1 -n 1 -w 5000 >NUL
 
-:: ADD FILE TO ZIP FILE, THEN DELETE FILE
-::------------------------------------------
-:: http://www.codejacked.com/zip-up-files-from-the-command-line/
-"C:\Program Files\7-zip\7z.exe" u -tzip text.zip outfile.txt && del outfile.txt
-
-
-::#==================#
-::#   GIT COMMANDS   #
-::#==================#
-
-:: GIT: ADD AND COMMIT ALL FILES
-::-------------------------------------
-"cd " & OutputDir
-git add -f . && git commit -a -m "Commit Message"
-
-:: add files to staging area: 
-git add -f .
-
-:: commit and add commit note:
-commit -a -m "Commit Note"
-
-
-::#=====================#
-::#   PYTHON COMMANDS   #
-::#=====================#
-
-:: PYTHON: PROFILE A SCRIPT
-:: -----------------------------------------
-cd C:\ScriptLocation
-python -m cProfile C:/ScriptLocation/ScriptName.py >> profile_summary.txt
+:: Append a blank line to text file
+echo. >> output.txt
