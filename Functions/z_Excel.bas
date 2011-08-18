@@ -26,14 +26,14 @@ Public Function WB_OpenOrSelect(WBDir As String, WBName As String) As Variant
         '                    - Out: selected workbook if avaliable, error if not available
         '                    - Last Updated: 7/4/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         If WB_IsOpen(WBName) = True Then
                 Set WB_OpenOrSelect = Workbooks(WBName)
         Else
                 If Right(WBDir, 1) <> "\" Then WBDir = WBDir & "\"
                 Set WB_OpenOrSelect = Workbooks.Open(WBDir & WBName)
         End If
-IsError:
+isError:
         WB_OpenOrSelect = CVErr(xlErrNA)
         Debug.Print "Error in WB_OpenOrSelect: " & Err.Number & ": " & Err.Description
 End Function
@@ -66,7 +66,7 @@ Public Function ColumnLetter(ColumnNumber As Variant) As Variant
         '               - Out: ColumnLetter as String
         '               - Last Updated: 6/30/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-         On Error GoTo IsError
+         On Error GoTo isError
          Select Case ColumnNumber
                 Case Is > 1378
                         'special case, the first 26 column set should be subtracted , 26*26 = 676
@@ -85,7 +85,7 @@ Public Function ColumnLetter(ColumnNumber As Variant) As Variant
                         ColumnLetter = Chr(ColumnNumber + 64)
         End Select
         Exit Function
-IsError:
+isError:
         ColumnLetter = CVErr(xlErrNA)
         Debug.Print "Error in ColumnLetter: " & Err.Number & ": " & Err.Description
 End Function
@@ -100,7 +100,7 @@ Public Function Picture_AddFromFile(FN As String, ImageName As String, _
         '                       - Last Updated: 5/31/11 by AJS
         '----------------------------------------------------------------
         Dim ThisShape As Shape
-        On Error GoTo IsError
+        On Error GoTo isError
         Set ThisShape = PasteRange.Worksheet.Shapes.AddPicture(FN, msoFalse, msoTrue, _
                                                                                                                         PasteRange.Left, PasteRange.Top, _
                                                                                                                         Application.InchesToPoints(Width), _
@@ -108,7 +108,7 @@ Public Function Picture_AddFromFile(FN As String, ImageName As String, _
         ThisShape.Name = ImageName
         Picture_AddFromFile = True
         Exit Function
-IsError:
+isError:
         Picture_AddFromFile = CVErr(xlErrNA)
         Debug.Print "Error in Picture_AddFromFile: " & Err.Number & ": " & Err.Description
 End Function
@@ -134,7 +134,7 @@ Public Function Comment_AddPicture(CommentCell As Range, _
         'DELETE EXISTING COMMENT
         On Error Resume Next
                 CommentCell.Comment.Delete
-        On Error GoTo IsError
+        On Error GoTo isError
         
         'CHECK TO SEE IF FILE EXISTS
         If z_Files.GetFileInfo(PictureFN, FileExists) = False Then GoTo FileNotFound
@@ -154,7 +154,7 @@ FileNotFound:
         CommentCell.Comment.Visible = False
         Comment_AddPicture = False
         Exit Function
-IsError:
+isError:
         Comment_AddPicture = CVErr(xlErrNA)
         Debug.Print "Error in Comment_AddPicture: " & Err.Number & ": " & Err.Description
 End Function
@@ -174,14 +174,14 @@ Public Function Comment_AddText(CommentCell As Range, _
         '-----------------------------------------------------------------------------------------------------------
         On Error Resume Next
         CommentCell.Comment.Delete
-        On Error GoTo IsError
+        On Error GoTo isError
         CommentCell.AddComment StringText
         CommentCell.Comment.Visible = False
         CommentCell.Comment.Shape.Height = CommentHeight
         CommentCell.Comment.Shape.Width = CommentWidth
         Comment_AddText = True
         Exit Function
-IsError:
+isError:
         Comment_AddPicture = CVErr(xlErrNA)
         Debug.Print "Error in Comment_AddText: " & Err.Number & ": " & Err.Description
 End Function
@@ -201,10 +201,10 @@ Public Function Validation_DoesItExist(cellRange As Range) As Boolean
         '                           - Out: Boolean TRUE if validation exists, FALSE otherwise
         '                           - Last Updated: 7/3/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
                 If IsNumeric(cellRange.Validation.Type) Then Validation_DoesItExist = True
         Exit Function
-IsError:
+isError:
         Validation_DoesItExist = False
 End Function
 
@@ -232,7 +232,7 @@ Public Function Validation_AddList(RangeToAddValidation As Range, _
         End With
         Validation_AddList = True
         Exit Function
-IsError:
+isError:
         Validation_AddList = CVErr(xlErrNA)
         Debug.Print "Error in Validation_AddList: " & Err.Number & ": " & Err.Description
 End Function
@@ -244,11 +244,11 @@ Public Function Validiation_DeleteAll(cellRange As Range) As Variant
         '                       - Out: Boolean true if validation succesfully deleted
         '                       - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         cellRange.Validation.Delete
         Validiation_DeleteAll = True
         Exit Function
-IsError:
+isError:
         Validiation_DeleteAll = CVErr(xlErrNA)
         Debug.Print "Error in Validiation_DeleteAll: " & Err.Number & ": " & Err.Description
 End Function
@@ -267,7 +267,7 @@ Public Function Validation_WholeNumber(cellRange As Range, _
         '                        - Out: Boolean true if validation added, error if error
         '                        - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         With cellRange.Validation
                 .Delete
                 .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=Min, Formula2:=Max
@@ -282,7 +282,7 @@ Public Function Validation_WholeNumber(cellRange As Range, _
         End With
         Validation_WholeNumber = True
         Exit Function
-IsError:
+isError:
         Validation_WholeNumber = CVErr(xlErrNA)
         Debug.Print "Error in Validation_WholeNumber: " & Err.Number & ": " & Err.Description
 End Function
@@ -296,7 +296,7 @@ Public Function Validation_FreeText(cellRange As Range, _
         '                        - Out: Boolean true if validation added
         '                        - Last Updated: 5/2/11 by AJS
         '---------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         With cellRange.Validation
                 .Delete
                 .Add Type:=xlValidateInputOnly, AlertStyle:=xlValidAlertStop, Operator:=xlBetween
@@ -311,7 +311,7 @@ Public Function Validation_FreeText(cellRange As Range, _
         End With
         Validation_FreeText = True
         Exit Function
-IsError:
+isError:
         Validation_FreeText = CVErr(xlErrNA)
         Debug.Print "Error in Validation_FreeText: " & Err.Number & ": " & Err.Description
 End Function
@@ -330,7 +330,7 @@ Public Function Borders_AddStandard(TableRange As Range) As Variant
         '                       - Out: Boolean true if borders succesfully added
         '                       - Last Updated: 3/6/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         With TableRange
                 'no diagonals
            .Borders(xlDiagonalDown).LineStyle = xlNone
@@ -366,7 +366,7 @@ Public Function Borders_AddStandard(TableRange As Range) As Variant
         End With
         Borders_AddStandard = True
         Exit Function
-IsError:
+isError:
         Borders_AddStandard = CVErr(xlErrNA)
         Debug.Print "Error in Borders_AddStandard: " & Err.Number & ": " & Err.Description
 End Function
@@ -378,7 +378,7 @@ Public Function Borders_AddDblOutside(TableRange As Range) As Variant
         '                       - Out: Boolean true if borders succesfully added
         '                       - Last Updated: 5/25/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         With TableRange
                 'no diagonals
            .Borders(xlDiagonalDown).LineStyle = xlNone
@@ -414,7 +414,7 @@ Public Function Borders_AddDblOutside(TableRange As Range) As Variant
         End With
         Borders_AddDblOutside = True
         Exit Function
-IsError:
+isError:
         Borders_AddDblOutside = CVErr(xlErrNA)
         Debug.Print "Error in Borders_AddDblOutside: " & Err.Number & ": " & Err.Description
 End Function
@@ -438,7 +438,7 @@ Public Function NamedRange_Add(NamedRange As Range, _
         '                    - Out: Boolean true/false if succesfully completed
         '                    - Last Updated: 3/6/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         If WorkbookRange = True Then
                 ActiveWorkbook.Names.Add Name:=NamedRangeName, RefersTo:="='" & NamedRange.Worksheet.Name & "'!" & NamedRange.Address
         Else
@@ -447,7 +447,7 @@ Public Function NamedRange_Add(NamedRange As Range, _
         On Error GoTo 0
         NamedRange_Add = True
         Exit Function
-IsError:
+isError:
         NamedRange_Add = CVErr(xlErrNA)
         Debug.Print "Error in NamedRange_Add: " & Err.Number & ": " & Err.Description
 End Function
@@ -465,7 +465,7 @@ Public Function NamedRange_AddValueIfUnqiue(Value As String, _
         '----------------------------------------------------------------
         Dim NamedRange As Range
         Set NamedRange = Range(NamedRangeName)
-        If IsError(Range_FindMatch(Value, Range(NamedRange))) = True Then
+        If isError(Range_FindMatch(Value, Range(NamedRange))) = True Then
                 NamedRange.Worksheet.Cells(NamedRange.Row + NamedRange.Rows.Count, NamedRange.Column) = Value
                 NamedRange_Add z_Excel.ExtDown(NamedRange), NamedRangeName
                 Range_Sort Range(NamedRangeName), RangeIncludesHeader
@@ -473,7 +473,7 @@ Public Function NamedRange_AddValueIfUnqiue(Value As String, _
         Else
                 NamedRange_AddValueIfUnqiue = False
         End If
-IsError:
+isError:
         NamedRange_AddValueIfUnqiue = CVErr(xlErrNA)
         Debug.Print "Error in NamedRange_AddValueIfUnqiue: " & Err.Number & ": " & Err.Description
 End Function
@@ -495,13 +495,13 @@ Public Function Hyperlink_Add(AnchorRange As Range, _
         '                        - Out: Boolean true if hyperlink succesfully added
         '                        - Last Updated: 3/6/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         AnchorRange.Worksheet.Hyperlinks.Add Anchor:=AnchorRange, _
                                                                                         Address:=HyperlinkAddress, _
                                                                                         TextToDisplay:=TextToDisplay
         Hyperlink_Add = True
         Exit Function
-IsError:
+isError:
         Hyperlink_Add = CVErr(xlErrNA)
         Debug.Print "Error in Hyperlink_Add: " & Err.Number & ": " & Err.Description
 End Function
@@ -525,7 +525,7 @@ Public Function EmbededObject_Add(FullFileName As String, _
         '                     - Last Updated: 4/22/11 by AJS
         '-----------------------------------------------------------------------------------------------------------
         Dim OBJ As Variant
-        On Error GoTo IsError
+        On Error GoTo isError
         
         'CHECK TO SEE IF FILE EXISTS
         If z_Files.GetFileInfo(FullFileName, FileExists) = False Then GoTo FileNotFound
@@ -543,7 +543,7 @@ Public Function EmbededObject_Add(FullFileName As String, _
 FileNotFound:
         EmbededObject_Add = False
         Exit Function
-IsError:
+isError:
         EmbededObject_Add = CVErr(xlErrNA)
         Debug.Print "Error in EmbededObject_Add: " & Err.Number & ": " & Err.Description
 End Function
@@ -557,7 +557,7 @@ Public Function EmbededObject_ClearAllInWB() As Variant
         Application.ScreenUpdating = False
         Dim thisObj As Object
         Dim thisWS As Worksheet
-        On Error GoTo IsError
+        On Error GoTo isError
         For Each thisWS In ThisWorkbook
                 For Each thisObj In thisWS.OLEObjects
                         thisObj.Delete
@@ -565,7 +565,7 @@ Public Function EmbededObject_ClearAllInWB() As Variant
         Next
         EmbededObject_ClearAllInWB = True
         Exit Function
-IsError:
+isError:
         EmbededObject_ClearAllInWB = CVErr(xlErrNA)
         Debug.Print "Error in EmbededObject_ClearAllInWB: " & Err.Number & ": " & Err.Description
 End Function
@@ -613,7 +613,7 @@ Public Function Tbl_Lookup(Tbl As Range, _
         Dim ReturnCollection As New Collection
                                 
         'BREAK UP ALL MATCH CRITERIA
-        On Error GoTo IsError
+        On Error GoTo isError
         ReDim ColName(0 To UBound(SearchCriteria(0)))
         ReDim MatchCriteria(0 To UBound(SearchCriteria(0)))
         ReDim ColNum(0 To UBound(SearchCriteria(0)))
@@ -659,7 +659,7 @@ Public Function Tbl_Lookup(Tbl As Range, _
                 Tbl_Lookup = CVErr(xlErrNA)
         End If
         Exit Function
-IsError:
+isError:
         Tbl_Lookup = CVErr(xlErrNA)
         Debug.Print "Error in Tbl_Lookup: " & Err.Number & ": " & Err.Description
 End Function
@@ -675,25 +675,25 @@ Public Function Tbl_ReturnUniqueList(SearchRange As Range) As Variant
         ' Dim ThisCollection as New Collection
         ' Set ThisCollection = Tbl_ReturnUniqueList(SearchRange)
         '-----------------------------------------------------------------------------------------------------------
-        Dim EachRng As Range
+        Dim eachRng As Range
         Dim UniqueCollection As New Collection
         Dim CollectionItem As Variant
         Dim Unique As Boolean
         
-        On Error GoTo IsError
-        For Each EachRng In SearchRange
+        On Error GoTo isError
+        For Each eachRng In SearchRange
                 Unique = True
                 For Each CollectionItem In UniqueCollection
-                        If EachRng.Value = CollectionItem Then
+                        If eachRng.Value = CollectionItem Then
                                 Unique = False
                                 Exit For
                         End If
                 Next
-                If Unique = True Then UniqueCollection.Add EachRng.Value
+                If Unique = True Then UniqueCollection.Add eachRng.Value
         Next
         Set Tbl_ReturnUniqueList = UniqueCollection
         Exit Function
-IsError:
+isError:
         Tbl_ReturnUniqueList = CVErr(xlErrNA)
         Debug.Print "Error in Tbl_ReturnUniqueList: " & Err.Number & ": " & Err.Description
 End Function
@@ -711,12 +711,12 @@ Public Function Tbl_GetHeaderColumn(SearchField As String, _
         '-----------------------------------------------------------------------------------------------------------
         Dim ReturnColumn As Variant
         
-        On Error GoTo IsError
+        On Error GoTo isError
         ReturnColumn = SearchRange.Column + WorksheetFunction.Match(SearchField, SearchRange.Rows(1).Cells, False) - 1
         If ReturnNumeric = False Then ReturnColumn = z_Excel.ColumnLetter(CLng(ReturnColumn))
         Tbl_GetHeaderColumn = ReturnColumn
         Exit Function
-IsError:
+isError:
         Tbl_GetHeaderColumn = CVErr(xlErrNA)
         Debug.Print "Error in Tbl_GetHeaderColumn: " & Err.Number & ": " & Err.Description
 End Function
@@ -739,10 +739,10 @@ Public Function ExtTbl(Rng As Range, _
         '                    - Out: Tbl_ExtTbl as Range
         '                    - Last Updated: 4/7/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         Set ExtTbl = z_Excel.ExtRight(z_Excel.ExtDown(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
         Exit Function
-IsError:
+isError:
         ExtTbl = CVErr(xlErrNA)
         Debug.Print "Error in ExtTbl: " & Err.Number & ": " & Err.Description
 End Function
@@ -757,7 +757,7 @@ Public Function ExtDown(Rng As Range, _
         '                    - Out: Tbl_ExtDown as Range
         '                    - Last Updated: 4/7/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         Set Rng = Rng.Offset(RowOffset, ColOffset)
         If IsEmpty(Rng.Offset(1, 0)) Then
                 Set ExtDown = Rng
@@ -765,7 +765,7 @@ Public Function ExtDown(Rng As Range, _
                 Set ExtDown = Range(Rng, Rng.End(xlDown))
         End If
         Exit Function
-IsError:
+isError:
         ExtDown = CVErr(xlErrNA)
         Debug.Print "Error in ExtDown: " & Err.Number & ": " & Err.Description
 End Function
@@ -780,7 +780,7 @@ Public Function ExtRight(Rng As Range, _
         '                    - Out: ExtRight as Range
         '                    - Last Updated: 4/7/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         Set Rng = Rng.Offset(RowOffset, ColOffset)
         If IsEmpty(Rng.Offset(0, 1)) Then
                 Set ExtRight = Rng
@@ -788,7 +788,7 @@ Public Function ExtRight(Rng As Range, _
                 Set ExtRight = Range(Rng, Rng.End(xlToRight))
         End If
         Exit Function
-IsError:
+isError:
         ExtRight = CVErr(xlErrNA)
         Debug.Print "Error in ExtRight: " & Err.Number & ": " & Err.Description
 End Function
@@ -807,7 +807,7 @@ Public Function ExtDownNonBlank(Rng As Range, _
         Dim NewRng As Range
         Dim LastRow As Long
         
-        On Error GoTo IsError
+        On Error GoTo isError
         Set NewRng = ExtDown(Rng, RowOffset, ColOffset)
         For LastRow = NewRng.Rows.Count To 1 Step -1
                 If Not NewRng.Cells(LastRow, 1) = "" Then
@@ -816,7 +816,7 @@ Public Function ExtDownNonBlank(Rng As Range, _
         Next LastRow
         Set ExtDownNonBlank = NewRng.Resize(LastRow, NewRng.Columns.Count)
         Exit Function
-IsError:
+isError:
         ExtDownNonBlank = CVErr(xlErrNA)
         Debug.Print "Error in ExtDownNonBlank: " & Err.Number & ": " & Err.Description
 End Function
@@ -832,10 +832,10 @@ Public Function ExtTblNonBlank(Rng As Range, _
         '                    - Created: 5/15/11 by GH
         '                    - Last Updated: 6/1/11 by AJS
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         Set ExtTblNonBlank = z_Excel.ExtRight(ExtDownNonBlank(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
         Exit Function
-IsError:
+isError:
         ExtTblNonBlank = CVErr(xlErrNA)
         Debug.Print "Error in ExtTblNonBlank: " & Err.Number & ": " & Err.Description
 End Function
@@ -853,14 +853,14 @@ Public Function ExtAllTbl(ByRef Rng As Range, _
         Dim RightmostColumn As Long
         Dim BottomRow As Long
         
-        On Error GoTo IsError
+        On Error GoTo isError
         Set Rng = Rng.Offset(RowOffset, ColOffset)
         BottomRow = Application.Max(LastRow(Rng.Worksheet, Rng.Column), Rng.Row)
         RightmostColumn = Application.Max(LastColumn(Rng.Worksheet, Rng.Row), Rng.Column)
         Set ExtAllTbl = Rng.Resize(RowSize:=(BottomRow - Rng.Rows.Count - Rng.Row + 2), _
                                                                 ColumnSize:=(RightmostColumn - Rng.Columns.Count - Rng.Column + 2))
         Exit Function
-IsError:
+isError:
         ExtAllTbl = CVErr(xlErrNA)
         Debug.Print "Error in ExtAllTbl: " & Err.Number & ": " & Err.Description
 End Function
@@ -879,7 +879,7 @@ Public Function ExtAllDown(ByRef Rng As Range, _
         BottomRow = Application.Max(LastRow(Rng.Worksheet, Rng.Column), Rng.Row)
         Set ExtAllDown = Rng.Resize(RowSize:=(BottomRow - Rng.Rows.Count - Rng.Row + 2))
         Exit Function
-IsError:
+isError:
         ExtAllDown = CVErr(xlErrNA)
         Debug.Print "Error in ExtAllDown: " & Err.Number & ": " & Err.Description
 End Function
@@ -898,7 +898,7 @@ Public Function ExtAllRight(ByRef Rng As Range, _
         RightmostColumn = Application.Max(LastColumn(Rng.Worksheet, Rng.Row), Rng.Column)
         Set ExtAllRight = Rng.Resize(ColumnSize:=(RightmostColumn - Rng.Columns.Count - Rng.Column + 2))
         Exit Function
-IsError:
+isError:
         ExtAllRight = CVErr(xlErrNA)
         Debug.Print "Error in ExtAllRight: " & Err.Number & ": " & Err.Description
 End Function
@@ -910,14 +910,14 @@ Private Function LastRow(ByVal OfSheet As Worksheet, Optional ByVal InColumn As 
         '                    - Out: LastRow as Range
         '                    - Last Updated: 3/9/11 by AJS (originally from GH)
         '---------------------------------------------------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
         If InColumn = 0 Then
                 LastRow = OfSheet.UsedRange.Row + OfSheet.UsedRange.Rows.Count - 1
         Else
                 LastRow = OfSheet.Cells(Application.Rows.Count, InColumn).End(xlUp).Row
         End If
         Exit Function
-IsError:
+isError:
         LastRow = CVErr(xlErrNA)
         Debug.Print "Error in LastRow: " & Err.Number & ": " & Err.Description
 End Function
@@ -930,7 +930,7 @@ Private Function LastColumn(ByVal OfSheet As Worksheet, Optional ByVal InRow As 
         '                    - Last Updated: 3/9/11 by AJS (originally from GH)
         '---------------------------------------------------------------------------------------------------------
         Dim i As Integer, letter As String
-        On Error GoTo IsError
+        On Error GoTo isError
         If InRow = 0 Then
                 i = OfSheet.UsedRange.Columns.Count + 1
                 Do
@@ -942,7 +942,7 @@ Private Function LastColumn(ByVal OfSheet As Worksheet, Optional ByVal InRow As 
                 LastColumn = OfSheet.Cells(InRow, Application.Columns.Count).End(xlToLeft).Column
         End If
         Exit Function
-IsError:
+isError:
         LastColumn = CVErr(xlErrNA)
         Debug.Print "Error in LastColumn: " & Err.Number & ": " & Err.Description
 End Function
@@ -965,11 +965,11 @@ Public Function Range_CopyPasteValues(CopyRange As Range, PasteRange As Range) A
     '                               PasteRange As Range
     '                       - Last Updated: 7/4/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo IsError
+    On Error GoTo isError
     PasteRange.Value = CopyRange.Value
     Range_CopyPasteValues = True
     Exit Function
-IsError:
+isError:
     Range_CopyPasteValues = CVErr(xlErrNA)
     Debug.Print "Error in Range_CopyPasteValues: " & Err.Number & ": " & Err.Description
 End Function
@@ -982,13 +982,13 @@ Public Function Range_CopyPasteAll(CopyRange As Range, PasteRange As Range) As V
     '                               PasteRange As Range
     '                       - Last Updated: 7/4/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo IsError
+    On Error GoTo isError
     CopyRange.Copy
     PasteRange.PasteSpecial (xlPasteAll)
     Application.CutCopyMode = False
     Range_CopyPasteAll = True
     Exit Function
-IsError:
+isError:
     Range_CopyPasteAll = CVErr(xlErrNA)
     Debug.Print "Error in Range_CopyPasteAll: " & Err.Number & ": " & Err.Description
 End Function
@@ -999,7 +999,7 @@ Public Function Range_Sort(wsRange As Range, RangeIncludesHeader As Boolean) As 
     '                    - In : wsRange As Range, Header As Boolean
     '                    - Last Updated: 3/9/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo IsError
+    On Error GoTo isError
     Dim HeaderType As Integer
     Select Case RangeIncludesHeader
             Case True
@@ -1015,10 +1015,27 @@ Public Function Range_Sort(wsRange As Range, RangeIncludesHeader As Boolean) As 
                     DataOption1:=xlSortNormal
     Range_Sort = True
     Exit Function
-IsError:
+isError:
     Range_Sort = False
     Debug.Print "Error in Range_Sort: " & Err.Number & ": " & Err.Description
 End Function
+
+Private Function Range_GetMaxRow(FirstCellInRange As Range) As Variant
+    '-----------------------------------------------------------------------------------------------------------
+    ' Range_GetMaxRow      Returns the maximum row down using ExtDown from a Range
+    '                      In : FirstCellInRange As Range
+    '                      Out: Maximum Row ID or an error
+    '                      Last Updated: 8/18/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo isError:
+    Range_GetMaxRow = FirstCellInRange.Row + z_Excel.ExtDown(FirstCellInRange).Rows.Count - 1
+    Exit Function
+isError:
+    Range_GetMaxRow = CVErr(xlErrNA)
+    Debug.Print "Error in Function Range_GetMaxRow: " & Err.Number & ": " & Err.Description
+End Function
+
+
 
 Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     '-----------------------------------------------------------------------------------------------------------
@@ -1026,7 +1043,7 @@ Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     '                             In : InputRange As Range
     '                             Last Updated: 7/28/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo IsError
+    On Error GoTo isError
     Dim eachCell As Range
     Dim OutputArray() As Variant
     Dim Counter As Long
@@ -1039,7 +1056,7 @@ Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     Next
     Range_ConvertTo1DArray = OutputArray
     Exit Function
-IsError:
+isError:
         Range_ConvertTo1DArray = CVErr(XlNA)
         Debug.Print "Error in Range_ConvertTo1DArray: " & Err.Number & ": " & Err.Description
 End Function
@@ -1050,10 +1067,10 @@ Private Function Range_ConvertToArray(InputRange As Range) As Variant
     '                           In : InputRange As Range
     '                           Last Updated: 7/28/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo IsError
+    On Error GoTo isError
     Range_ConvertToArray = InputRange.Value2
     Exit Function
-IsError:
+isError:
         Range_ConvertToArray = CVErr(XlNA)
         Debug.Print "Error in Range_ConvertToArray: " & Err.Number & ": " & Err.Description
 End Function
@@ -1065,20 +1082,20 @@ Public Function Range_FindMatch(SearchString As String, SearchRange As Range) As
         '                       - Out: Index of matched string, if found, FALSE if not match
         '                       - Last Updated: 3/24/11 by AJS
         '----------------------------------------------------------------
-        On Error GoTo IsError
+        On Error GoTo isError
                 Range_FindMatch = WorksheetFunction.Match(SearchString, SearchRange, False)
         Exit Function
-IsError:
+isError:
         Range_FindMatch = False
 End Function
 
 Private Function DoesFileExist(FN As String) As Variant
         Dim fso As Object
-        On Error GoTo IsError
+        On Error GoTo isError
         Set fso = CreateObject("Scripting.FileSystemObject")
         DoesFileExist = fso.FileExists(FN)
         Exit Function
-IsError:
+isError:
         DoesFileExist = CVErr(xlErrNA)
         Debug.Print "Error in Private Function DoesFileExist: " & Err.Number & ": " & Err.Description
 End Function
