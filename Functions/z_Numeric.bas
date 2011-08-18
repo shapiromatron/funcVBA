@@ -1,3 +1,4 @@
+Attribute VB_Name = "z_numeric"
 Option Explicit
 
 Enum NumberPrintReturnType

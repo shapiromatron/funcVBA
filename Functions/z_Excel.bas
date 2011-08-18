@@ -137,7 +137,7 @@ Public Function Comment_AddPicture(CommentCell As Range, _
         On Error GoTo IsError
         
         'CHECK TO SEE IF FILE EXISTS
-        If DoesFileExist(PictureFN) = False Then GoTo FileNotFound
+        If z_Files.GetFileInfo(PictureFN, FileExists) = False Then GoTo FileNotFound
         If FileLen(PictureFN) = 0 Then GoTo FileNotFound
         
         'LOAD PICTURE INTO COMMENT
@@ -460,14 +460,14 @@ Public Function NamedRange_AddValueIfUnqiue(Value As String, _
         '                               - In : Value As String
         '                                      NamedRangeName As String
         '                               - Out: Boolean TRUE if value added, FALSE if already exists, error if error
-        '                               - Requires: FindMatch
+        '                               - Requires: Range_FindMatch
         '                               - Last Updated: 3/6/11 by AJS
         '----------------------------------------------------------------
         Dim NamedRange As Range
         Set NamedRange = Range(NamedRangeName)
-        If IsError(FindMatch(Value, NamedRange)) = True Then
+        If IsError(Range_FindMatch(Value, Range(NamedRange))) = True Then
                 NamedRange.Worksheet.Cells(NamedRange.Row + NamedRange.Rows.Count, NamedRange.Column) = Value
-                NamedRange_Add ExtDown(NamedRange), NamedRangeName
+                NamedRange_Add z_Excel.ExtDown(NamedRange), NamedRangeName
                 Range_Sort Range(NamedRangeName), RangeIncludesHeader
                 NamedRange_AddValueIfUnqiue = True
         Else
@@ -528,7 +528,7 @@ Public Function EmbededObject_Add(FullFileName As String, _
         On Error GoTo IsError
         
         'CHECK TO SEE IF FILE EXISTS
-        If DoesFileExist(FullFileName) = False Then GoTo FileNotFound
+        If z_Files.GetFileInfo(FullFileName, FileExists) = False Then GoTo FileNotFound
         If FileLen(FullFileName) = 0 Then GoTo FileNotFound
 
         If SheetRange.Address <> "" Then
@@ -785,8 +785,8 @@ End Function
 
 
 Public Function Tbl_GetHeaderColumn(SearchField As String, _
-                                                                        SearchRange As Range, _
-                                                                        Optional ReturnNumeric As Boolean = False) As Variant
+                                    SearchRange As Range, _
+                                    Optional ReturnNumeric As Boolean = False) As Variant
         '-----------------------------------------------------------------------------------------------------------
         ' Tbl_GetHeaderColumn   - Returns the column of the header, either numeric or column letter
         '                       - In : SearchField As String
@@ -799,7 +799,7 @@ Public Function Tbl_GetHeaderColumn(SearchField As String, _
         
         On Error GoTo IsError
         ReturnColumn = SearchRange.Column + WorksheetFunction.Match(SearchField, SearchRange.Rows(1).Cells, False) - 1
-        If ReturnNumeric = False Then ReturnColumn = ColumnLetter(CLng(ReturnColumn))
+        If ReturnNumeric = False Then ReturnColumn = z_Excel.ColumnLetter(CLng(ReturnColumn))
         Tbl_GetHeaderColumn = ReturnColumn
         Exit Function
 IsError:
@@ -816,8 +816,8 @@ End Function
 '****************************************************
 
 Public Function ExtTbl(Rng As Range, _
-                                                Optional RowOffset As Long = 0, _
-                                                Optional ColOffset As Long = 0) As Variant
+                       Optional RowOffset As Long = 0, _
+                       Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtTbl             - Extends the table down to the first blank at bottom of top right row/column
         '                           will stop at the first blank row
@@ -826,7 +826,7 @@ Public Function ExtTbl(Rng As Range, _
         '                    - Last Updated: 4/7/11 by AJS
         '---------------------------------------------------------------------------------------------------------
         On Error GoTo IsError
-        Set ExtTbl = ExtRight(ExtDown(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
+        Set ExtTbl = z_Excel.ExtRight(z_Excel.ExtDown(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
         Exit Function
 IsError:
         ExtTbl = CVErr(xlErrNA)
@@ -834,8 +834,8 @@ IsError:
 End Function
 
 Public Function ExtDown(Rng As Range, _
-                                                Optional RowOffset As Long = 0, _
-                                                Optional ColOffset As Long = 0) As Variant
+                        Optional RowOffset As Long = 0, _
+                        Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtDown            - Extends the selected range down to the final non-blank row in current table;
         '                           will stop at the first blank row
@@ -857,8 +857,8 @@ IsError:
 End Function
 
 Public Function ExtRight(Rng As Range, _
-                                                        Optional RowOffset As Long = 0, _
-                                                        Optional ColOffset As Long = 0) As Variant
+                         Optional RowOffset As Long = 0, _
+                         Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtRight           - Extends the selected range down to the final non-blank column in current table;
         '                           will stop at the first blank column
@@ -880,8 +880,8 @@ IsError:
 End Function
 
 Public Function ExtDownNonBlank(Rng As Range, _
-                                                                Optional RowOffset As Long = 0, _
-                                                                Optional ColOffset As Long = 0) As Variant
+                                Optional RowOffset As Long = 0, _
+                                Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtDownNonBlank    - Extends the range down to the first non-blank at bottom-left of selected range;
         '                           will stop at the first blank row where a formula evaluates to a value
@@ -908,8 +908,8 @@ IsError:
 End Function
 
 Public Function ExtTblNonBlank(Rng As Range, _
-                                                                Optional RowOffset As Long = 0, _
-                                                                Optional ColOffset As Long = 0) As Variant
+                               Optional RowOffset As Long = 0, _
+                               Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtTblNonBlank     - Extends the range down and right to the first non-blank at bottom-left of selected range;
         '                           will stop at the first blank row where a formula evaluates to a value
@@ -919,7 +919,7 @@ Public Function ExtTblNonBlank(Rng As Range, _
         '                    - Last Updated: 6/1/11 by AJS
         '---------------------------------------------------------------------------------------------------------
         On Error GoTo IsError
-        Set ExtTblNonBlank = ExtRight(ExtDownNonBlank(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
+        Set ExtTblNonBlank = z_Excel.ExtRight(ExtDownNonBlank(Rng.Offset(RowOffset, ColOffset), 0, 0), 0, 0)
         Exit Function
 IsError:
         ExtTblNonBlank = CVErr(xlErrNA)
@@ -927,8 +927,8 @@ IsError:
 End Function
 
 Public Function ExtAllTbl(ByRef Rng As Range, _
-                                                        Optional RowOffset As Long = 0, _
-                                                        Optional ColOffset As Long = 0) As Variant
+                          Optional RowOffset As Long = 0, _
+                          Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtAllTbl          - Extends the selected range right and down to the final non-blank row if
         '                           leftmost column and the final non-blank row in topmost row
@@ -952,8 +952,8 @@ IsError:
 End Function
 
 Public Function ExtAllDown(ByRef Rng As Range, _
-                                                        Optional RowOffset As Long = 0, _
-                                                        Optional ColOffset As Long = 0) As Variant
+                           Optional RowOffset As Long = 0, _
+                           Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtAllDown         - Extends the selected range down to the final non-blank row in leftmost column
         '                    - In : ByRef Rng As Range, Optional RowOffset As Long = 0, Optional ColOffset As Long = 0
@@ -971,8 +971,8 @@ IsError:
 End Function
 
 Public Function ExtAllRight(ByRef Rng As Range, _
-                                                        Optional RowOffset As Long = 0, _
-                                                        Optional ColOffset As Long = 0) As Variant
+                            Optional RowOffset As Long = 0, _
+                            Optional ColOffset As Long = 0) As Variant
         '---------------------------------------------------------------------------------------------------------
         ' ExtAllRight        - Extends the selected range right to the final non-blank row in topmost row
         '                    - In : ByRef Rng As Range, Optional RowOffset As Long = 0, Optional ColOffset As Long = 0
@@ -1022,7 +1022,7 @@ Private Function LastColumn(ByVal OfSheet As Worksheet, Optional ByVal InRow As 
                 Do
                         i = i - 1
                         LastColumn = OfSheet.UsedRange.Columns(i).Cells(1, 1).Column
-                        letter = ColumnLetter(LastColumn)
+                        letter = z_Excel.ColumnLetter(LastColumn)
                 Loop Until (Application.WorksheetFunction.CountA(OfSheet.Range(letter & ":" & letter)) > 0 Or i < 2)
         Else
                 LastColumn = OfSheet.Cells(InRow, Application.Columns.Count).End(xlToLeft).Column

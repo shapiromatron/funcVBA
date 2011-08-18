@@ -1,3 +1,4 @@
+Attribute VB_Name = "z_Files"
 Option Explicit
 
 Enum FileTypes
@@ -18,7 +19,7 @@ Enum GetFileInfo
         '----------------------------------------------------------------
         ' GetFileInfo    - Used with GetFileInfo
         '----------------------------------------------------------------
-        PathOnly = 1
+        Pathonly = 1
         NameAndExtension = 2
         NameOnly = 3
         ExtensionOnly = 4
@@ -83,7 +84,7 @@ Public Function SelectExistingFolder(Optional MenuTitleName As String = "Select 
         Exit Function
 UserCancelled:
         SelectExistingFolder = False
-		Exit Function
+                Exit Function
 IsError:
         SelectExistingFolder = CVErr(xlErrNA)
         Debug.Print "Error in SelectExistingFolder: " & Err.Number & ": " & Err.Description
@@ -197,7 +198,7 @@ End Function
 
 Public Function FileListInFolder(ByVal PathName As String, Optional ByVal FileFilter As String = "*.*") As Collection
         '-----------------------------------------------------------------------------------------------------------
-        ' FileList           - Returns a collection of files in a given folder with the specified filter
+        ' FileListInFolder   - Returns a collection of files in a given folder with the specified filter
         '                       Can filter by a certain type of filename, if file filter is set to equal a certain extension
         '                       Replacement for Application.FileSearch, removed from Excel 2007
         '                       Uses MSDOS Dir function: http://www.computerhope.com/dirhlp.htm
@@ -391,7 +392,7 @@ Public Function FileCopy2(ByVal SourceFile As String, ByVal DestinationFile As S
                 MsgBox "Error- file does not exist and cannot be copied:" & vbNewLine & vbNewLine & SourceFile, vbCritical, "File cannot be copied"
                 GoTo IsError
         End If
-        If GetFileInfo(DestinationFile, FileExists) = True Then Kill2 DestinationFile
+        If GetFileInfo(DestinationFile, FileExists) = True Then z_Files.Kill2 DestinationFile
         On Error Resume Next
         Do While GetFileInfo(DestinationFile, FileExists) = False
                 FileCopy SourceFile, DestinationFile

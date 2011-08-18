@@ -13,7 +13,7 @@ End Function
 
 Public Function AddQuotes(ByVal TextInQuotes As String) As String
     '----------------------------------------------------
-    '  AddNewLine         - Surrounds text in quotations
+    '  AddQuotes         - Surrounds text in quotations
     '                    - In : TextInQuotes as String
     '                    - Out: "TextInQuotes" as String
     '                    - Last Updated: 3/6/11 by AJS
