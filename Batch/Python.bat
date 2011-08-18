@@ -9,3 +9,4 @@ python -m cProfile C:/ScriptLocation/ScriptName.py >> profile_summary.txt
 :: Install package using PIP
 cd C:\Python27\Scripts
 pip install scipy
+pip install cython
