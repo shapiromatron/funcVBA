@@ -46,7 +46,7 @@ Public Function Coll_ReturnUniqueCollFromColl(FullCollection As Collection) As V
     Dim UniqueCollection As New Collection
     Dim eachItem As Variant, eachUnique As Variant
     Dim MatchFound As Boolean
-    On Error GoTo isError:
+    On Error GoTo IsError:
         For Each eachItem In FullCollection
             MatchFound = False
             For Each eachUnique In UniqueCollection
@@ -59,7 +59,7 @@ Public Function Coll_ReturnUniqueCollFromColl(FullCollection As Collection) As V
         Next
         Set Coll_ReturnUniqueCollFromColl = UniqueCollection
     Exit Function
-isError:
+IsError:
     Coll_ReturnUniqueCollFromColl = CVErr(xlErrNA)
     Debug.Print "Error in Coll_ReturnUniqueCollFromColl: " & Err.Number & ": " & Err.Description
 End Function
@@ -82,7 +82,7 @@ Public Function Coll_ReturnListFromCollection(FullCollection As Collection) As V
     '                                   - Out: List in string, or error
     '                                   - Last Updated: 8/7/11 by AJS
     '-----------------------------------------------------------------------------------------------------------
-    On Error GoTo isError
+    On Error GoTo IsError
     Dim eachItem As Variant
     Dim FullString As String
     Dim FullArray() As Variant
@@ -106,7 +106,7 @@ Public Function Coll_ReturnListFromCollection(FullCollection As Collection) As V
     Next
     Coll_ReturnListFromCollection = FullString
     Exit Function
-isError:
+IsError:
     Coll_ReturnListFromCollection = CVErr(xlErrNA)
     Debug.Print "Error in Coll_ReturnListFromCollection: " & Err.Number & ": " & Err.Description
 End Function
@@ -115,7 +115,7 @@ Public Function Coll_ToArray(FullCollection As Collection) As Variant
     Dim eachItem As Variant
     Dim Counter As Integer
     Dim FullArray() As Variant
-    On Error GoTo isError:
+    On Error GoTo IsError:
     Counter = 1
     For Each eachItem In FullCollection
         ReDim Preserve FullArray(1 To Counter)
@@ -124,7 +124,7 @@ Public Function Coll_ToArray(FullCollection As Collection) As Variant
     Next
     Coll_ToArray = FullArray
     Exit Function
-isError:
+IsError:
         Coll_ToArray = CVErr(xlErrNA)
         Debug.Print "Error in Coll_ToArray: " & Err.Number & ": " & Err.Description
 End Function

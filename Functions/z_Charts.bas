@@ -42,7 +42,7 @@ Function Series_Update(ChartName As String, SeriesName As String, XRange As Rang
     Dim eachSeries As Series
     Dim FullSeries As String
     
-    On Error GoTo isError:
+    On Error GoTo IsError:
     For Each eachChart In ActiveWorkbook.Charts
         If eachChart.Name = ChartName Then
             eachChart.Activate
@@ -59,7 +59,7 @@ Function Series_Update(ChartName As String, SeriesName As String, XRange As Rang
     Next
     Series_Update = True
     Exit Function
-isError:
+IsError:
     Series_Update = CVErr(xlErrNA)
     Debug.Print "Error in Series_Update: " & Err.Number & ": " & Err.Description
 End Function
@@ -71,10 +71,10 @@ Function PrintChartAddress(thisRange As Range) As Variant
     '                    - Out: formatted string if succesful, error if false
     '                    - Last Updated: 8/22/11 by AJS
     '---------------------------------------------------------------------------------------------------------
-    On Error GoTo isError:
+    On Error GoTo IsError:
     PrintChartAddress = "'" & thisRange.Worksheet.Name & "'!" & thisRange.Address
     Exit Function
-isError:
+IsError:
     PrintChartAddress = CVErr(xlErrNA)
     Debug.Print "Error in PrintChartAddress: " & Err.Number & ": " & Err.Description
 End Function

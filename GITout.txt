@@ -2,3 +2,24 @@
 C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>cd C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library\ 
 
 C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>git add -f .   && git commit -a -m "Added z_charts" 
+[master 0aef664] Added z_charts
+ Committer: unknown <16955@.icf-hq.icfconsulting.com>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+If the identity used for this commit is wrong, you can fix it with:
+
+    git commit --amend --author='Your Name <you@example.com>'
+
+ 11 files changed, 92 insertions(+), 38 deletions(-)
+ delete mode 100644 Functions/h_Charts.bas
+ create mode 100644 Functions/z_Charts.bas
+ rewrite VBA.pnps (100%)
+
+C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>cd C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library\ 
+
+C:\Documents and Settings\16955\My Documents\Dropbox\Excel\VBA_library>git add -f .   && git commit -a -m "Added Range_Set function" 
