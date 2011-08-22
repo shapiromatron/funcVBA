@@ -12,5 +12,4 @@
 
 from distutils.core import setup
 import py2exe
-
 setup(console=[r'C:\Temp\ScriptToCompile.py'])

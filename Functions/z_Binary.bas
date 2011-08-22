@@ -1,3 +1,4 @@
+Attribute VB_Name = "z_Binary"
 Option Explicit
 
 'Demonstration routine

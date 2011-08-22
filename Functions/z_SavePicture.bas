@@ -1,3 +1,7 @@
+Attribute VB_Name = "z_SavePicture"
+Option Explicit
+Option Compare Text
+
 ' EXAMPLE USAGE (SAVES A SHAPE AS AN EMF in the location ThisWorkbook.Path & "\temp.emf"): 
 ' ____________________________________________________________
 ' Sheets(SN_Output).Shapes(FullFileEMF).Copy
@@ -33,8 +37,6 @@
 '*   CreatePicture  Private function to convert a bitmap or metafile handle to an OLE reference
 '*   fnOLEError     Get the error text for an OLE error code
 '***************************************************************************
-Option Explicit
-Option Compare Text
 
 ''' User-Defined Types for API Calls
 

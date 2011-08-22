@@ -1,3 +1,4 @@
+Attribute VB_Name = "z_PastePicture"
 ' EXAMPLE USAGE (PASTE SHAPE ON WORKSHEET TO SHAPE IN FORM): 
 ' ____________________________________________________________
 ' Sheets(SN_Output).Shapes(EMFName).Copy
