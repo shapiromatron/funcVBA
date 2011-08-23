@@ -31,16 +31,21 @@ Private Sub EachChartObject()
     Set ChartID = Nothing
 End Sub
 
-Function Series_Update(ChartName As String, SeriesName As String, XRange As Range, YRange As Range) As Variant
+Function Series_ScatterplotUpdate(ChartName As String, SeriesName As String, XRange As Range, YRange As Range) As Variant
     '---------------------------------------------------------------------------------------------------------
-    ' Series_Update      - Updates a series for a chart in a workbook
-    '                    - In : ChartName As String, SeriesName As String, XRange As Range, YRange As Range
-    '                    - Out: TRUE if succesful, error if false
-    '                    - Last Updated: 8/22/11 by AJS
+    ' Series_ScatterplotUpdate  - Updates a series for a chart in a workbook
+    '                           - In : ChartName As String, SeriesName As String, XRange As Range, YRange As Range
+    '                           - Out: TRUE if succesful, error if false
+    '                           - Last Updated: 8/22/11 by AJS
     '---------------------------------------------------------------------------------------------------------
     Dim eachChart As Chart
     Dim eachSeries As Series
     Dim FullSeries As String
+    Dim XAddress As String
+    Dim YAddress As String
+    
+    XAddress = z_Charts.PrintChartAddress(XRange)
+    YAddress = z_Charts.PrintChartAddress(YRange)
     
     On Error GoTo IsError:
     For Each eachChart In ActiveWorkbook.Charts
@@ -50,18 +55,18 @@ Function Series_Update(ChartName As String, SeriesName As String, XRange As Rang
                 If eachSeries.Name = SeriesName Then
                     eachSeries.Formula = "=SERIES(" & _
                         Chr(34) & SeriesName & Chr(34) & "," & _
-                        z_Charts.PrintChartAddress(XRange) & ", " & _
-                        z_Charts.PrintChartAddress(YRange) & "," & _
+                        XAddress & ", " & _
+                        YAddress & "," & _
                         eachSeries.PlotOrder & ")"
                 End If
             Next
         End If
     Next
-    Series_Update = True
+    Series_ScatterplotUpdate = True
     Exit Function
 IsError:
-    Series_Update = CVErr(xlErrNA)
-    Debug.Print "Error in Series_Update: " & Err.Number & ": " & Err.Description
+    Series_ScatterplotUpdate = CVErr(xlErrNA)
+    Debug.Print "Error in Series_ScatterplotUpdate: " & Err.Number & ": " & Err.Description
 End Function
 
 Function PrintChartAddress(thisRange As Range) As Variant

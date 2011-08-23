@@ -465,7 +465,7 @@ Public Function NamedRange_AddValueIfUnqiue(Value As String, _
         '----------------------------------------------------------------
         Dim NamedRange As Range
         Set NamedRange = Range(NamedRangeName)
-        If IsError(Range_FindMatch(Value, Range(NamedRange))) = True Then
+        If IsError(Range_FindMatch(Value, NamedRange)) = True Then
                 NamedRange.Worksheet.Cells(NamedRange.Row + NamedRange.Rows.Count, NamedRange.Column) = Value
                 NamedRange_Add z_Excel.ExtDown(NamedRange), NamedRangeName
                 Range_Sort Range(NamedRangeName), RangeIncludesHeader
@@ -473,6 +473,7 @@ Public Function NamedRange_AddValueIfUnqiue(Value As String, _
         Else
                 NamedRange_AddValueIfUnqiue = False
         End If
+        Exit Function
 IsError:
         NamedRange_AddValueIfUnqiue = CVErr(xlErrNA)
         Debug.Print "Error in NamedRange_AddValueIfUnqiue: " & Err.Number & ": " & Err.Description
@@ -1050,7 +1051,7 @@ IsError:
     Debug.Print "Error in Range_Sort: " & Err.Number & ": " & Err.Description
 End Function
 
-Private Function Range_GetMaxRow(FirstCellInRange As Range) As Variant
+Public Function Range_GetMaxRow(FirstCellInRange As Range) As Variant
     '-----------------------------------------------------------------------------------------------------------
     ' Range_GetMaxRow      Returns the maximum row down using ExtDown from a Range
     '                      In : FirstCellInRange As Range
@@ -1064,8 +1065,6 @@ IsError:
     Range_GetMaxRow = CVErr(xlErrNA)
     Debug.Print "Error in Function Range_GetMaxRow: " & Err.Number & ": " & Err.Description
 End Function
-
-
 
 Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     '-----------------------------------------------------------------------------------------------------------
@@ -1087,7 +1086,7 @@ Public Function Range_ConvertTo1DArray(InputRange As Range) As Variant
     Range_ConvertTo1DArray = OutputArray
     Exit Function
 IsError:
-        Range_ConvertTo1DArray = CVErr(XlNA)
+        Range_ConvertTo1DArray = CVErr(xlna)
         Debug.Print "Error in Range_ConvertTo1DArray: " & Err.Number & ": " & Err.Description
 End Function
 
@@ -1101,7 +1100,7 @@ Private Function Range_ConvertToArray(InputRange As Range) As Variant
     Range_ConvertToArray = InputRange.Value2
     Exit Function
 IsError:
-        Range_ConvertToArray = CVErr(XlNA)
+        Range_ConvertToArray = CVErr(xlna)
         Debug.Print "Error in Range_ConvertToArray: " & Err.Number & ": " & Err.Description
 End Function
 
@@ -1113,10 +1112,10 @@ Public Function Range_FindMatch(SearchString As String, SearchRange As Range) As
         '                       - Last Updated: 3/24/11 by AJS
         '----------------------------------------------------------------
         On Error GoTo IsError
-                Range_FindMatch = WorksheetFunction.Match(SearchString, SearchRange, False)
+            Range_FindMatch = WorksheetFunction.Match(SearchString, SearchRange, False)
         Exit Function
 IsError:
-        Range_FindMatch = False
+        Range_FindMatch = CVErr(xlErrNA)
 End Function
 
 Private Function DoesFileExist(FN As String) As Variant
