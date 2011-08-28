@@ -130,3 +130,85 @@ IsError:
 End Function
 
 
+'*********************************************
+'*/-----------------------------------------\*
+'*|                                         |*
+'*|  VBA OBJECT IMPORT/EXPORT FUNCTIONS     |*
+'*|                                         |*
+'*\-----------------------------------------/*
+'*********************************************
+Public Function ExportVBComponent(VBComp As vbide.VBComponent, _
+                                  FolderName As String, _
+                                  Optional FileName As String, _
+                                  Optional ByVal Extension As String, _
+                                  Optional OverwriteExisting As Boolean = True) As Variant
+    '-----------------------------------------------------------------------------------------------------------
+    ' ExportVBComponent   - This function exports the code module of a VBComponent to a text
+    '                       file. If FileName is missing, the code will be exported to
+    '                       a file with the same name as the VBComponent followed by the
+    '                       appropriate extension.
+    '                     - Last Updated: 8/27/11 by AJS, created by GH
+    '-----------------------------------------------------------------------------------------------------------
+    Dim FName As String
+    On Error GoTo IsError
+    
+    'get extension (if not passed)
+    If Trim(Extension) = vbNullString Then
+        Extension = z_VBA.GetVBAFileExtension(VBComp:=VBComp)
+    End If
+    
+    'get filename and extension
+    If Trim(FileName) = vbNullString Then
+        FName = VBComp.Name & Extension
+    Else
+        FName = FileName
+        FName = FName & "." & Extension
+    End If
+        
+    'get full directory for export
+    If Right(FolderName, 1) = "\" Then
+        FName = FolderName & FName
+    Else
+        FName = FolderName & "\" & FName
+    End If
+    
+    'overwrite if needed
+    If Len(Dir(FName)) > 0 Then
+        If OverwriteExisting = True Then
+            Kill FName
+        Else
+            ExportVBComponent = ""
+            Exit Function
+        End If
+    End If
+    
+    'export component; return filename
+    VBComp.Export FileName:=FName
+    ExportVBComponent = FName
+    Exit Function
+IsError:
+    ExportVBComponent = CVErr(xlErrNA)
+    Debug.Print "Error in ExportVBComponent: " & Err.Number & ": " & Err.Description
+End Function
+    
+Public Function GetVBAFileExtension(VBComp As vbide.VBComponent) As String
+    '-----------------------------------------------------------------------------------------------------------
+    ' GetVBAFileExtension   - This returns the appropriate file extension based on the Type of
+    '                         the VBComponent.
+    '                       - Last Updated: 8/27/11 by AJS, created by GH
+    '-----------------------------------------------------------------------------------------------------------
+    On Error GoTo IsError:
+    Select Case VBComp.Type
+        Case vbext_ct_ClassModule, vbext_ct_Document
+            GetFileExtension = ".cls"
+        Case vbext_ct_MSForm
+            GetFileExtension = ".frm"
+        Case vbext_ct_StdModule
+            GetFileExtension = ".bas"
+        Case Else
+            GetFileExtension = ".bas"
+    End Select
+IsError:
+    ExportVBComponent = CVErr(xlErrNA)
+    Debug.Print "Error in ExportVBComponent: " & Err.Number & ": " & Err.Description
+End Function

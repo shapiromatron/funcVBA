@@ -19,7 +19,7 @@ Private Declare Function OpenProcess Lib "kernel32.dll" (ByVal dwDesiredAccessas
 Function CommitToGIT(OutputDir As String) As Boolean
         '-----------------------------------------------------------------------------------------------------------
         ' CommitToGIT   - Commits changes in all files to GIT repository
-		'				- Directory must already contain a GIT repository
+                '                               - Directory must already contain a GIT repository
         '               - In : OutputDir as string
         '               - Out: TRUE if succesful, FALSE if otherwise
         '               - Last Updated: 7/20/11 by AJS
@@ -27,10 +27,10 @@ Function CommitToGIT(OutputDir As String) As Boolean
     Dim CommitMessage As String
     Dim ProcessID As Long
     
-    On Error GoTo IsError	
-	Do
-		CommitMessage = InputBox("Enter GIT commit input message: ", "GIT Revisions Message")
-	Loop Until CommitMessage <> ""
+    On Error GoTo IsError
+        Do
+                CommitMessage = InputBox("Enter GIT commit input message: ", "GIT Revisions Message")
+        Loop Until CommitMessage <> ""
     Open OutputDir & "GITbat.bat" For Output As #1
         Print #1, "cd " & OutputDir     'change directory to tracking folder
         Print #1, "git add -f . && git commit -a -m " & Chr(34) & CommitMessage & Chr(34)
