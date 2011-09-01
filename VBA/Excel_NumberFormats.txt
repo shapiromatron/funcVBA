@@ -1,0 +1,9 @@
+Excel/Word Text File formats:
+Note- you can only use an if/else statement for these
+
+Good stuff: http://peltiertech.com/Excel/NumberFormats.html
+
+[>1]#,##0;##0.######
+If value is greater than 1, add commas
+If value is less than one, then use 0.000 blah until 6 decimal points
+
