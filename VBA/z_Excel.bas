@@ -1128,3 +1128,42 @@ IsError:
         DoesFileExist = CVErr(xlErrNA)
         Debug.Print "Error in Private Function DoesFileExist: " & Err.Number & ": " & Err.Description
 End Function
+
+'****************************************************
+'*/------------------------------------------------\*
+'*|                                                |*
+'*|  ERROR TRAPPING FUNCTIONS                      |*
+'*|    (traps errors that would cause runtime      |*
+'*|     errors unless otherwise caught, such as    |*
+'*|     does a worksheet exist or a chart exist)   |*
+'*|                                                |*
+'*\------------------------------------------------/*
+'****************************************************
+
+Public Function ErrorTrap_WSExists(WSName As String) As Boolean
+    '----------------------------------------------------------------
+    ' ErrorTrap_WSExists    - Returns TRUE if worksheet exists, FALSE if it doesn't
+    '                       - Last Updated: 9/1/11 by AJS
+    '----------------------------------------------------------------
+On Error GoTo IsError:
+    If Sheets(WSName).Name <> "" Then
+        ErrorTrap_WSExists = True
+    End If
+    Exit Function
+IsError:
+    ErrorTrap_WSExists = False
+End Function
+
+Public Function ErrorTrap_ChartExists(ChartName As String) As Boolean
+    '----------------------------------------------------------------
+    ' ErrorTrap_ChartExists - Returns TRUE if chart exists, FALSE if it doesn't
+    '                       - Last Updated: 9/1/11 by AJS
+    '----------------------------------------------------------------
+On Error GoTo IsError:
+    If Charts(ChartName).Name <> "" Then
+        ErrorTrap_ChartExists = True
+    End If
+    Exit Function
+IsError:
+    ErrorTrap_ChartExists = False
+End Function
