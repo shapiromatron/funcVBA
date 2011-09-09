@@ -1,1 +1,1 @@
-<Project name="MSDOS"><Folder name="Commands"><File path="Batch\Commands.bat"></File><File path="Batch\Backup.bat"></File><File path="Batch\Zip.bat"></File><File path="Batch\Python.bat"></File></Folder></Project>
+<Project name="MSDOS"><File path="Batch\Backup.bat"></File><File path="Batch\Zip.bat"></File><File path="Batch\Commands.bat"></File></Project>
