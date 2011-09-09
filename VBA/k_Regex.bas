@@ -45,8 +45,8 @@ Public Function RegexSearch(ByVal Pattern As String, _
 '  attributes. See:
 '  http://msdn.microsoft.com/en-us/library/ms974619.aspx#scripting12_topic4
 '
-    Dim re As New RegExp
-    
+    Dim re As Object
+    Set re = CreateObject("vbscript.regexp")
     With re
         .Pattern = Pattern
         .IgnoreCase = IgnoreCase
@@ -90,8 +90,8 @@ Public Function RegexReplace(ByVal Pattern As String, _
 '  in `SourceString`. If `Pattern` is not found, returns `SourceString`
 '  as-is.
 '
-    Dim re As New RegExp
-    
+    Dim re As Object
+    Set re = CreateObject("vbscript.regexp")
     With re
         .Pattern = Pattern
         .IgnoreCase = IgnoreCase

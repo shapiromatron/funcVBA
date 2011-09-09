@@ -607,7 +607,7 @@ Public Function Tbl_Lookup(Tbl As Range, _
         '        Debug.Print "AllMatch: " & CStr(eachItem)
         '    Next
         '---------------------------------------------------------------------------------------------------------
-        Dim eachItem As Variant, eachRow As Variant
+        Dim eachItem As Variant, EachRow As Variant
         Dim ColName() As String, MatchCriteria() As String, ColNum() As Integer
         Dim SplitVal2() As String, i As Integer, ReturnCol As Integer
         Dim MatchFound As Boolean
@@ -629,10 +629,10 @@ Public Function Tbl_Lookup(Tbl As Range, _
         ReturnCol = Range_FindMatch(ReturnColumnName, Tbl.Rows(1).Cells)
         
         'FIND MATCHES IN TABLE
-        For Each eachRow In Tbl.Columns(1).Cells    'Search each row in table
+        For Each EachRow In Tbl.Columns(1).Cells    'Search each row in table
                 MatchFound = True
                 For i = 0 To UBound(SearchCriteria(0))  'Search each match criteria
-                        If MatchCriteria(i) <> Tbl.Cells(eachRow.Row, ColNum(i)) Then
+                        If MatchCriteria(i) <> EachRow.Offset(0, ColNum(0) - 1).Value Then
                                 MatchFound = False
                                 Exit For
                         End If
@@ -641,15 +641,15 @@ Public Function Tbl_Lookup(Tbl As Range, _
                         ' FirstMatch = 1, FirstMatchRow = 2, AllMatch = 3, AllMatchRows = 4
                         Select Case LookupReturn
                                 Case 1
-                                        Tbl_Lookup = Tbl.Cells(eachRow.Row, ReturnCol).Value
+                                        Tbl_Lookup = EachRow.Offset(0, ReturnCol - 1).Value
                                         Exit Function
                                 Case 2
-                                        Tbl_Lookup = eachRow.Row
+                                        Tbl_Lookup = EachRow.Row
                                         Exit Function
                                 Case 3
-                                        ReturnCollection.Add Tbl.Cells(eachRow.Row, ReturnCol).Value
+                                        ReturnCollection.Add EachRow.Offset(0, ReturnCol - 1).Value
                                 Case 4
-                                        ReturnCollection.Add eachRow.Row
+                                        ReturnCollection.Add EachRow.Row
                         End Select
                 End If
         Next
