@@ -28,7 +28,7 @@ Public Function Dict_AddOrUpdate(ThisDict As Variant, Key As String, Value As Va
     '                    - Last Updated: 8/18/11 by AJS
     '---------------------------------------------------------------------------------------------------------
     If ThisDict.Exists(Key) Then
-        ThisDict.Item(Key) = Value
+        ThisDict.item(Key) = Value
     Else
         ThisDict.Add Key, Value
     End If
@@ -72,9 +72,9 @@ End Function
 '*\-----------------------------------------/*
 '*********************************************
 
-Public Function Coll_ReturnListFromCollection(FullCollection As Collection) As Variant
+Public Function Coll_ReturnStringListFromCollection(FullCollection As Collection) As Variant
     '-----------------------------------------------------------------------------------------------------------
-    ' Coll_ReturnListFromCollection     - Returns a string list from a collection
+    ' Coll_ReturnStringListFromCollection     - Returns a string list from a collection
     '                                       If 3 or greater: "alpha, beta, and zeta"
     '                                       If 2: "alpha and beta"
     '                                       If 1: "alpha"
@@ -104,11 +104,11 @@ Public Function Coll_ReturnListFromCollection(FullCollection As Collection) As V
                 FullString = FullString & ", " & FullArray(Counter)
         End Select
     Next
-    Coll_ReturnListFromCollection = FullString
+    Coll_ReturnStringListFromCollection = FullString
     Exit Function
 IsError:
-    Coll_ReturnListFromCollection = CVErr(xlErrNA)
-    Debug.Print "Error in Coll_ReturnListFromCollection: " & Err.Number & ": " & Err.Description
+    Coll_ReturnStringListFromCollection = CVErr(xlErrNA)
+    Debug.Print "Error in Coll_ReturnStringListFromCollection: " & Err.Number & ": " & Err.Description
 End Function
 
 Public Function Coll_ToArray(FullCollection As Collection) As Variant
@@ -129,6 +129,33 @@ IsError:
         Debug.Print "Error in Coll_ToArray: " & Err.Number & ": " & Err.Description
 End Function
 
+Public Function Coll_ExistsInCollection(SearchString As String, Coll As Collection) As Boolean
+    '-----------------------------------------------------------------------------------------------------------
+    ' Coll_ExistsInCollection     - Returns TRUE if value exists in collection, FALSE if otherwise
+    '                             - In : SearchString As String, Coll As Collection
+    '                             - Last Updated: 9/28/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    Dim eachVal As Variant
+    For Each eachVal In Coll
+        If SearchString = CStr(eachVal) Then
+            Coll_ExistsInCollection = True
+            Exit Function
+        End If
+    Next
+    Coll_ExistsInCollection = False
+End Function
+
+Public Function Coll_AddIfUnique(Addition As String, Coll As Collection)
+    '-----------------------------------------------------------------------------------------------------------
+    ' Coll_AddIfUnique     - Adds to collection if value doesn't already exist in collection
+    '                      - In : Addition as string, Coll as collection
+    '                      - Last Updated: 9/28/11 by AJS
+    '-----------------------------------------------------------------------------------------------------------
+    If Coll_ExistsInCollection(Addition, Coll) = False Then
+        Coll.Add Addition
+    End If
+    Set Coll_AddIfUnique = Coll
+End Function
 
 Public Function Coll_Sort(ByVal c As Collection) As Collection
 ' This routine uses the "heap sort" algorithm to sort a VB collection.
@@ -148,7 +175,7 @@ Public Function Coll_Sort(ByVal c As Collection) As Collection
       Heapify c, Index, 0, m - 1
       Next
    Dim c2 As New Collection
-   For i = 0 To n - 1: c2.Add c.Item(Index(i)): Next  ' fill output collection
+   For i = 0 To n - 1: c2.Add c.item(Index(i)): Next  ' fill output collection
    Set Coll_Sort = c2
    End Function
 
@@ -160,9 +187,9 @@ Private Sub Heapify(ByVal c As Collection, Index() As Long, ByVal i1 As Long, By
    Do While i < nDiv2
       Dim k As Long: k = 2 * i + 1
       If k + 1 < n Then
-         If c.Item(Index(k)) < c.Item(Index(k + 1)) Then k = k + 1
+         If c.item(Index(k)) < c.item(Index(k + 1)) Then k = k + 1
          End If
-      If c.Item(Index(i)) >= c.Item(Index(k)) Then Exit Do
+      If c.item(Index(i)) >= c.item(Index(k)) Then Exit Do
       Exchange Index, i, k
       i = k
       Loop

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #Stop a script
 #------------------------
 break

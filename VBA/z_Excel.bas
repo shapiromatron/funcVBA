@@ -221,7 +221,7 @@ Public Function Validation_AddList(RangeToAddValidation As Range, _
         '---------------------------------------------------------------------------------
         On Error Resume Next
         RangeToAddValidation.Validation.Delete
-        On Error GoTo ValidationFailed
+        On Error GoTo IsError
         With RangeToAddValidation.Validation
                 .Add Type:=xlValidateList, _
                                         AlertStyle:=xlValidAlertStop, _
@@ -479,6 +479,42 @@ IsError:
         Debug.Print "Error in NamedRange_AddValueIfUnqiue: " & Err.Number & ": " & Err.Description
 End Function
 
+Public Function NamedRange_Replace(NamedRangeName As String, ReplaceCollection As Collection) As Boolean
+    '----------------------------------------------------------------
+    ' NamedRange_Replace   - Replace all fields currently listed in named range with new fields in a collection
+    '                      - In : NamedRangeName As String, ReplaceCollection as Collection
+    '                      - Out: Boolean TRUE if sucesfully completed, FALSE if unsuccesfull
+    '                      - Last Updated: 9/28/11 by AJS
+    '----------------------------------------------------------------
+    On Error GoTo IsError
+    Dim FirstCell As String, eachCell As Variant, Row As Long
+    Dim Col As String, WS As String, FirstRow As Long
+    'get information on first cell
+    WS = Range(NamedRangeName).Worksheet.Name
+    Col = ColumnLetter(Range(NamedRangeName).Column)
+    FirstRow = Range(NamedRangeName).Row
+    'clear existing cells
+    For Each eachCell In Range(NamedRangeName)
+        eachCell.Value = ""
+    Next
+    'update with new values
+    If ReplaceCollection.Count > 0 Then
+        Row = FirstRow
+        For Each eachCell In ReplaceCollection
+            Sheets(WS).Range(Col & Row) = CStr(eachCell)
+            Row = Row + 1
+        Next
+        z_Excel.NamedRange_Add ExtDown(Sheets(WS).Range(Col & FirstRow)), NamedRangeName
+    Else
+        z_Excel.NamedRange_Add Sheets(WS).Range(Col & FirstRow), NamedRangeName
+    End If
+    NamedRange_Replace = True
+    Exit Function
+IsError:
+    NamedRange_Replace = False
+    Debug.Print "Error in NamedRange_Replace: " & Err.Number & ": " & Err.Description
+End Function
+
 '************************************************
 '*/--------------------------------------------\*
 '*|                                            |*
@@ -505,6 +541,43 @@ Public Function Hyperlink_Add(AnchorRange As Range, _
 IsError:
         Hyperlink_Add = CVErr(xlErrNA)
         Debug.Print "Error in Hyperlink_Add: " & Err.Number & ": " & Err.Description
+End Function
+
+
+'************************************************
+'*/--------------------------------------------\*
+'*|                                            |*
+'*|  EXCEL LIST BOX ACTIVE OBJECT FUNCTIONS    |*
+'*|                                            |*
+'*\--------------------------------------------/*
+'************************************************
+
+Public Function ListBox_ReturnSelected(List_Box_OLE_Object As Variant) As Variant
+    '-----------------------------------------------------------------------------------------------------------
+    ' ListBox_ReturnSelected    - Returns selected fields from a multiselect list box
+    '                           - In : List_Box_OLE_Object as ListBox Object
+    '                           - Out: Collection of selected text or empty collection
+    '                           - Last Updated: 9/28/11 by AJS
+    ' Example function call:
+    '       Set NewColl = ListBox_ReturnSelected(Sheet1.OLEObjects("List Box 1"))
+    '-----------------------------------------------------------------------------------------------------------
+    Dim i As Integer
+    Dim ListCount As Integer
+    Dim ReturnCol As New Collection
+    On Error GoTo IsError
+    With List_Box_OLE_Object
+        ListCount = .Object.ListCount - 1
+        For i = 0 To ListCount
+            If .Object.Selected(i) = True Then
+                ReturnCol.Add .Object.List(i)
+            End If
+        Next i
+    End With
+    Set ListBox_ReturnSelected = ReturnCol
+    Exit Function
+IsError:
+    ListBox_ReturnSelected = CVErr(xlErrNA)
+    Debug.Print "Error in ListBox_ReturnSelected: " & Err.Number & ": " & Err.Description
 End Function
 
 '************************************************

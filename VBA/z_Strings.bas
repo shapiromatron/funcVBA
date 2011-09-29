@@ -86,7 +86,7 @@ Function SplitTextReturn(InTextLine As String, Delimeter As String, ReturnID As 
     ' SplitTextReturn    - Returns a field of a delimited text string
     '                    - In : InTextLine As String, Delimeter As String, ReturnID as Integer
     '                    - Out: SplitTextReturn as String
-    '                    - Last Updated: 5/2/11 by AJS
+    '                    - Last Updated: 9/28/11 by AJS
     '---------------------------------------------------------------------------------------------------------
     Dim SplitString As Variant
     On Error GoTo IsErr
@@ -94,7 +94,7 @@ Function SplitTextReturn(InTextLine As String, Delimeter As String, ReturnID As 
     SplitTextReturn = SplitString(ReturnID)
     Exit Function
 IsErr:
-    SplitTextReturn = Null
+    SplitTextReturn = ""
 End Function
 
 Function IsTextFound(ByVal FindText As String, ByVal WithinText As String) As Boolean
