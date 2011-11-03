@@ -76,6 +76,23 @@ Public Function get_tbl_range() As Range
     Set get_tbl_range = pTblRange
 End Function
 
+Public Function get_data_range() As Variant
+'Return the data range of the smart table, or nothing if no data
+    UpdateTblRange
+    If pTblRange.Rows.Count > 1 Then
+        Set get_data_range = pTblRange.Offset(1, 0).Resize(pTblRange.Rows.Count - 1, pTblRange.Columns.Count)
+     Else
+        Set get_data_range = Nothing
+    End If
+End Function
+
+Public Function get_worksheet() As Worksheet
+'Return the worksheet from the smart table
+    UpdateTblRange
+    Set get_worksheet = pTblRange.Worksheet
+End Function
+
+
 Public Function get_max_row() As Long
 'Return max row as long, or -999 if error
     On Error GoTo IsError
