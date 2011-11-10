@@ -6,9 +6,16 @@ of Python before running this script for that version.
 
 Install virtualenv for the desired version of Python this in Win cmd:
 'C:\Python2x\Scripts>pip.exe install virtualenv'
+    or:
+'C:\Python2x\Scripts>easy_install.exe virtualenv'
 
-If you don't have pip, get it: 
-http://www.pip-installer.org/en/latest/installing.html
+Note that virtual environments built with virtualenv automatically
+include pip. Using pip within the virtual environment only affects
+the virtual environment's packages. See >virtualenv.exe for options
+supported by virtualenv.
+
+If you don't have a global install of pip (e.g. in C:\Python2x\Scripts), 
+get it:  http://www.pip-installer.org/en/latest/installing.html
 '''
 
 
