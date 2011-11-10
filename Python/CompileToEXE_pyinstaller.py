@@ -2,6 +2,11 @@
 Run this script to create a Win32 executable file
 from a Python script, using PyInstaller.
 
+I recommend using the zip file version of PyInstaller.
+You don't have to install PyInstaller, and it doesn't
+have to go in your Python2x/Lib/site-packages folder.
+Just decompress the archive and have fun!
+
 PyInstaller site:           http://www.pyinstaller.org/
 PyInstaller tar.bz2 file:   http://files.zibricky.org/pyinst/pyinstaller-1.5.1.tar.bz2
 PyInstaller zip file:       http://files.zibricky.org/pyinst/pyinstaller-1.5.1.zip
