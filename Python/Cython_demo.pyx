@@ -5,9 +5,20 @@ of C or C++ code simultaneously, although this page says you
 can write 'shim' modules to mix them (but mixing is not currently
 supported out-of-the-box): 
 
-Notice this file's '.pyx' file extension. Cython code goes here.
+    Notice this file's '.pyx' file extension. Cython code goes here.
 This will be compiled to a 'Cython extension module.' This module
-can be called from a normal Python script.
+can then be called from a normal Python script.
+    To compile this script, call the 'Cython_demo_setup.py' script:
+	./>python Cython_demo_setup.py build_ext --inplace
+Read Cython_demo_setup.py to see the basic elements of a Cython setup 
+script. This template changes very little, especially when compiling
+only one *.pyx file into an extension module. The script builds a C
+source file from the *.pyx file(s), and this is then compiled to a
+Python extension module (*.pyd). You can import the *.pyd file into
+a pure Python environment as you would any module, and the C code
+does not (in my experience) need to be present to use it:
+
+	import Extension_module_name
 
 ABOUT:
 
@@ -48,12 +59,13 @@ MinGW on Windows:       http://docs.cython.org/src/tutorial/appendix.html
 # import pure Python modules normally
 import sys
 import os
+import numpy as np # import normally for Python calls
 
 # import C-accessible modules using cimport
 # this includes (to my knowledge) NumPy and
 # appropriately wrapped C/C++ libraries,
 # maybe SciPy as well
-cimport numpy as np
+cimport numpy as np # import specially for C calls
 
 # libc and libcpp come with Cython
 # for me, here:

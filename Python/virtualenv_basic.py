@@ -1,5 +1,5 @@
 '''
-Set up a bare-bones Python virtual environment with virtual env.
+Set up a bare-bones Python virtual environment with virtualenv.
 
 Note that virtualenv should be installed for the desired version
 of Python before running this script for that version.
@@ -38,18 +38,17 @@ def main(argv):
     # Specify desired location of the virtual 
     # environment that we will create. Change
     # 'C:\\' as needed.
-    ENV_DEST = "C:\\" + ENV_NAME
-    
+    ENV_DEST = 'C:\\' + ENV_NAME
     
     # Create virtual environment by calling
-    # virtualenv.exe with given `ENV_DEST`
+    # virtualenv.exe to build at `ENV_DEST`
     retcode = subprocess.call([VIRTUAL_ENV_EXE, ENV_DEST])
-    
     
     # A non-zero return code from the process
     # indicates an 'abnormal' execution.
     if retcode != 0:
-        raise Warning("Error creating virtual environment at %s with %s!" % (ENV_DEST, VIRTUAL_ENV_EXE))
+        raise Warning("Error creating virtual environment "
+                      "at %s with %s!" % (ENV_DEST, VIRTUAL_ENV_EXE))
         return False # unsuccessful
     
     # You can test the virtual environment by
@@ -59,4 +58,6 @@ def main(argv):
 if __name__ == '__main__':
     argv = sys.argv
     successful = main(argv)
-    print '[virtualenv_basic.py] -- The install was successful: %s' % str(successful).upper()
+    # print success true/false to stdio
+    print ('[virtualenv_basic.py] -- '
+           'The install was successful: %s' % str(successful).upper())
