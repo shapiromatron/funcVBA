@@ -86,6 +86,18 @@ Public Function get_data_range() As Variant
     End If
 End Function
 
+Public Function get_data_row_collection() As Collection
+    'Return a collection of data rows
+    Dim rows As New Collection, i As Long
+    UpdateTblRange
+    If pTblRange.rows.Count > 1 Then
+        For i = pTblRange.Row + 1 To pTblRange.Row + pTblRange.rows.Count - 1
+            rows.Add i
+        Next i
+    End If
+    Set get_data_row_collection = rows
+End Function
+
 Public Function get_worksheet() As Worksheet
 'Return the worksheet from the smart table
     UpdateTblRange
