@@ -2,6 +2,7 @@
 import zipfile
 
 def ZipIt(WriteFile, ZipFN):
+    """ Create a new Zip file and add a file to it """
     newZip = zipfile.ZipFile
     with newZip(ZipFN, 'a', compression=zipfile.ZIP_DEFLATED) as myzip:
         myzip.write(WriteFile)

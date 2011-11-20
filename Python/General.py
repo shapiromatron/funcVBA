@@ -44,3 +44,27 @@ class Timer:
         self.time2 = time.clock()
     def PrintTime(self):
         print "%s: %f" % (self.TimerName, self.time2 - self.time1)
+        
+# get location of running script
+import os
+print os.getcwd()
+
+# get computer name
+import os
+comp_name = os.getenv('COMPUTERNAME')
+
+# get current time
+def now_string():
+    import datetime
+    now = datetime.datetime.now()
+    print now.strftime("%Y-%m-%d %H:%M")
+
+# print Tweet completion using Tweet EXE
+import datetime
+now = datetime.datetime.now()
+time = now.strftime("%Y-%m-%d %H:%M")
+tweet_exe = r'%s/tweet.exe' % os.getcwd()
+tweet = 'TRIM.FaTE runs on %s complete at %s!' % (os.getenv('COMPUTERNAME'), time)
+print tweet_exe
+subprocess.call([tweet_exe, tweet])
+
