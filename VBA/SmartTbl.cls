@@ -70,6 +70,30 @@ End Property
 '##################
 '# PUBLIC METHODS #
 '##################
+
+Public Function save_new_data_row(dict As Variant)
+'Prints a new data row to the end of the file based on the values in a dictionary
+    Dim outrow As Long
+    Dim eachKey As Variant, eachHeader As Variant
+    Dim HeaderRng As Range
+    
+    On Error GoTo IsError
+    outrow = Me.get_max_row + 1
+    Set HeaderRng = Me.get_header_range()
+    For Each eachKey In dict
+        For Each eachHeader In HeaderRng
+            If eachKey = eachHeader.Value Then
+                pTblRange.Worksheet.Cells(outrow, eachHeader.Column) = dict(eachKey)
+                Exit For
+            End If
+        Next
+    Next
+    UpdateTblRange
+    Exit Function
+IsError:
+    Debug.Print "Error in save_new_data_row: " & Err.Number & ": " & Err.Description
+End Function
+
 Public Function get_tbl_range() As Range
 'Return the range of the smart table
     UpdateTblRange
@@ -134,6 +158,16 @@ Public Function get_header_column(HeaderName As String) As Long
     Exit Function
 IsError:
     get_header_column = -999
+End Function
+
+Public Function get_header_range() As Range
+'Returns the range of header columns
+    On Error GoTo IsError
+    UpdateTblRange
+    Set get_header_range = pTblRange.Resize(1, pTblRange.Columns.Count)
+    Exit Function
+IsError:
+    get_header_range = -999
 End Function
 
 Public Function get_unique_values_in_column(HeaderName As String) As Collection
