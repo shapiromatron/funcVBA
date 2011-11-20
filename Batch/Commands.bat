@@ -61,3 +61,13 @@ PING 1.1.1.1 -n 1 -w 5000 >NUL
 
 :: Append a blank line to text file
 echo. >> output.txt
+
+::PASS ARGUMENTS TO A BATCH FILE 
+::Note- up to 9 arguments can be passed, the 0 argument is the batch file name
+::
+:: example call: BatchFile.bat heido ho
+@echo off
+set var1=%1
+set var2=%2
+echo %var1%
+echo %Var2%
