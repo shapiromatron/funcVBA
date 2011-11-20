@@ -71,6 +71,45 @@ End Property
 '# PUBLIC METHODS #
 '##################
 
+Public Function named_range_all(root_name As String, name_columns As Boolean)
+'Create excel named ranges for table, and also each column if appropriate
+'Uses the following naming convention:
+'  Table name: "Tbl_{root_name}"
+'  Column name: "C_{root_name}_{cleaned_column_header}"
+    Dim name As String
+    Dim eachHeader As Variant
+    Dim min_row As Long, max_row As Long
+    On Error GoTo IsError
+    UpdateTblRange
+    'first name table
+    name = "Tbl_" & root_name
+    z_Excel.NamedRange_Add Me.get_tbl_range, name
+    'name each column if True
+    If name_columns = True Then
+        min_row = pTblRange.Row
+        max_row = Me.get_max_row
+        For Each eachHeader In Me.get_header_range
+            name = "C_" & root_name & "_" & clean_string(eachHeader.Value)
+            z_Excel.NamedRange_Add pTblRange.Worksheet.Range( _
+                        pTblRange.Worksheet.Cells(min_row, eachHeader.Column), _
+                        pTblRange.Worksheet.Cells(max_row, eachHeader.Column) _
+                                                            ), name
+        Next
+    End If
+    Exit Function
+IsError:
+    Debug.Print "Error in named_range_all: " & Err.Number & ": " & Err.Description
+End Function
+
+Private Function clean_string(dirty As String) As String
+'Cleans header string to make a valid named range name.
+'Sets all "dirty" characters to "_"
+    dirty = Replace(dirty, " ", "_")
+    dirty = Replace(dirty, "/", "_")
+    dirty = Replace(dirty, "\", "_")
+    clean_string = dirty
+End Function
+
 Public Function save_new_data_row(dict As Variant)
 'Prints a new data row to the end of the file based on the values in a dictionary
     Dim outrow As Long
