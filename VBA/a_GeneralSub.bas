@@ -196,6 +196,7 @@ Sub OpenWorkbook()
         
         'run a macro
         OtherWB.Activate
+        Application.Run ("'Book123.xlsm'!MacroName")
         Application.Run ("'" & OtherWB.Name & "'!MacroName")
         
         'copy from one workbook to this workbook
@@ -207,3 +208,28 @@ Sub OpenWorkbook()
     'close workbook and save changes
     OtherWB.Close SaveChanges:=True
 End Sub
+
+'DICTIONARY BASICS
+Sub DictBasics()
+    Dim Dict As Variant, eachkey As Variant
+
+    'Creation
+    Set Dict = CreateObject("Scripting.Dictionary")
+
+    'Addition
+    Dict.Add "Key", "Value"
+    Dict.Add "Key2", "Value2"
+    
+    'Update
+    Dict("Key2") = "Value3"
+
+    'Retrieval
+    For Each eachkey In Dict
+        Debug.Print "Key: " & eachkey
+        Debug.Print "Value: " & Dict(eachkey)
+    Next
+    
+    'Reset
+    Dict.RemoveAll
+End Sub
+
