@@ -21,6 +21,17 @@ Option Explicit
 'This class module requires the following function module:
 '   z_Excel.bas
 '
+'Example function calls:
+'-------------------------
+'   Initialization:
+'       Dim tbl As New SmartTbl
+'       tbl.SetTbl_Exact = Sheet1.Range("C2:D5")
+'
+'   Search Critiera:
+'       tbl.Lookup_ReturnFirstDict("Column Name=Search Value", "Name=John Smith")
+'
+'Features to add:
+'------------------
 ' ajs to add:
 ' smart extend, where it does a standard extright, and then goes through each column to find the max row, in counta
 '   this should replace extdown, so the first row doesn't need to be complete, and it'll work if rows are hidden
@@ -302,6 +313,25 @@ Function ReturnDict(Row As Long) As Variant
         TempDict.Add eachRng.Value, Value
     Next
     Set ReturnDict = TempDict
+End Function
+
+Public Function Lookup_MatchFound(ParamArray SearchCriteria() As Variant) As Variant
+    'Returns TRUE if a match is found or FALSE if no match is found
+    Dim EachRow As Variant, Criteria As Variant
+    UpdateTblRange
+    If UBound(SearchCriteria) = -1 Then GoTo IsError
+    Criteria = ParseCriteria(SearchCriteria)
+    If Criteria(0)(0) = -999 Then GoTo IsError
+    'For each row
+    For Each EachRow In pTblRange.Offset(1, 0).rows
+        If CheckForMatch(EachRow.Row, Criteria) = True Then
+            Lookup_MatchFound = True
+            Exit For
+        End If
+    Next
+    Exit Function
+IsError:
+    Lookup_MatchFound = False
 End Function
 
 Public Function Lookup_ReturnFirstMatch(ReturnHeaderName As String, _
