@@ -148,6 +148,20 @@ IsError:
     Debug.Print "Error in save_new_data_row: " & Err.Number & ": " & Err.Description
 End Function
 
+Public Function get_data_column_range(HeaderName As String) As Variant
+    'Returns the data range for a specific column
+    Dim col As Long
+    UpdateTblRange
+    col = Me.get_header_column(HeaderName)
+    If pTblRange.rows.Count = 1 Or col = -999 Then
+        Set get_data_column_range = Nothing
+    Else
+        Set get_data_column_range = pWS.Range( _
+                    pWS.Cells(pTblRange.row + 1, col), _
+                    pWS.Cells(Me.get_max_row, col))
+    End If
+End Function
+
 Public Function get_tbl_range() As Range
 'Return the range of the smart table
     UpdateTblRange
