@@ -488,7 +488,7 @@ Private Function CheckForMatch(SearchRow As Long, MatchCriteria As Variant) As B
     Dim i As Integer
     CheckForMatch = True
     For i = 0 To UBound(MatchCriteria(0))
-        If pWS.Cells(SearchRow, MatchCriteria(0)(i)) <> MatchCriteria(1)(i) Then
+        If CStr(pWS.Cells(SearchRow, MatchCriteria(0)(i))) <> CStr(MatchCriteria(1)(i)) Then
             CheckForMatch = False
             Exit For
         End If
