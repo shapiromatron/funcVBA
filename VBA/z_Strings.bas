@@ -129,20 +129,72 @@ Function Regex(SearchString As String, RegExPattern As String, Optional CaseSens
 'Example function call would return "ty1234"
 'MsgBox RegEx("qwerty123456uiops123456", "[a-z][A-Z][0-9][0-9][0-9][0-9]", False)
 '
-    Dim RE As Object, REMatches As Object
-    Set RE = CreateObject("vbscript.regexp")
-    With RE
-        .MultiLine = False
+    Dim re As Object, REMatches As Object
+    Set re = CreateObject("vbscript.regexp")
+    With re
+        .Multiline = False
         .Global = False
         .IgnoreCase = Not (CaseSensitive)
         .Pattern = RegExPattern
     End With
-    Set REMatches = RE.Execute(SearchString)
+    Set REMatches = re.Execute(SearchString)
     If REMatches.Count > 0 Then
         Regex = REMatches(0)
     Else
         Regex = False
     End If
+End Function
+
+Public Function RegexReplace(ByVal Pattern As String, _
+                             ByVal Replacement As String, _
+                             ByVal SourceString As String, _
+                             Optional ByVal IgnoreCase As Boolean = False, _
+                             Optional ByVal Glbl As Boolean = True, _
+                             Optional ByVal Multiline As Boolean = False _
+                             ) As String
+'Perform a regular expression replacement
+'
+'Parameters
+'----------
+'  Pattern:
+'    The regular expression pattern to search for
+'  Replacement:
+'    The string or pattern to be used as a replacement
+'  SourceString:
+'    The string to search within
+'  IgnoreCase (default=True):
+'    Whether to be case-insensitive
+'  Glbl (default=True):
+'    Whether to replace all matches in `SourceString` (otherwise,
+'    stop after the first replacement)
+'  Multiline (default=False):
+'    Whether to activate multiline mode. This makes the carat (^) and
+'    dollar ($) match at the beginning and end of each line, rather
+'    than the beggining and end of the entire string.
+'
+'Returns
+'-------
+'  String, with `Pattern` replaced with `Replacement`, if found
+'  in `SourceString`. If `Pattern` is not found, returns `SourceString`
+'  as-is.
+'
+'Example function call
+'---------------------
+'   Dim Pattern As String: Pattern = "(:\$[A-Z]+\$)([0-9]+)" '2 groups, first keep, 2nd replace
+'   Dim Replace As String: Replace = "$1" & 10     'keep $1, replace second with max row
+'   Dim TestVal As String: TestVal = "$B$2:$C$4"
+'   Debug.Print RegexReplace(Pattern, Replace, TestVal, True, False, False)
+
+    Dim re As Object
+    Set re = CreateObject("vbscript.regexp")
+    With re
+        .Pattern = Pattern
+        .IgnoreCase = IgnoreCase
+        .Global = Glbl
+        .Multiline = Multiline
+    End With
+    
+    RegexReplace = re.Replace(SourceString, Replacement)
 End Function
 
 Function Printf(ByVal FormatWithPercentSign As String, ParamArray InsertArray()) As String
