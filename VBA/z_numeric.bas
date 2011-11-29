@@ -9,7 +9,7 @@ Enum NumberPrintReturnType
     ReturnFormat = 2
 End Enum
 
-Function NumberToPrint(Number As Variant, ReturnType As NumberPrintReturnType) As Variant
+Function NumberToPrint(Number As Variant, ReturnType As NumberPrintReturnType, ShowCommas As Boolean) As Variant
     '---------------------------------------------------------------------------------------------------------
     ' NumberToPrint - Returns the number formatted or the format type
     '               - In :  Number as Variant
@@ -41,9 +41,17 @@ Function NumberToPrint(Number As Variant, ReturnType As NumberPrintReturnType) A
         Case Is > 100000
             TextFormat = "0.0E+00"
         Case Is > 10000
-            TextFormat = "0,000"
+            If ShowCommas = True Then
+               TextFormat = "0,000"
+            Else
+                TextFormat = "0000"
+            End If
         Case Is > 1000  'and < 10,000
-            TextFormat = "0,000"
+            If ShowCommas = True Then
+               TextFormat = "0,000"
+            Else
+                TextFormat = "0000"
+            End If
         Case Is > 100   'and < 1,000
             TextFormat = "0"
         Case Is > 10    'and < 100
