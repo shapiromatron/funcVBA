@@ -282,3 +282,20 @@ IsError:
     Debug.Print "Error in LinInterpolate: " & Err.Number & ": " & Err.Description
     LinInterpolate = CVErr(xlErrNA)
 End Function
+
+
+Function SigFig(Value As Double, SigFigs As Integer) As String
+    '----------------------------------------------------------------
+    ' SigFig        - Returns a string with the specified number of significant digits
+    '                 http://excel.tips.net/T001983_Thoughts_and_Ideas_on_Significant_Digits_in_Excel.html
+    '               - In : Value As Double, SigFigs As Integer
+    '               - Out: Value as string with specified significant digits
+    '               - Last Updated: 11/28/11 by AJS
+    '               - Things to add:
+    '                   a) Specify general or scientific format
+    '                   b) Don't show more sig figs than actually exist
+    '----------------------------------------------------------------
+    Dim val As String
+    val = WorksheetFunction.Fixed(Value, SigFigs - Int(WorksheetFunction.Log10(Value)) - 1)
+    SigFig = val
+End Function
