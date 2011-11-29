@@ -233,3 +233,7 @@ Sub DictBasics()
     Dict.RemoveAll
 End Sub
 
+'GET VARIABLE TYPE
+Dim Variable as Variant
+debug.print TypeName(Variable)
+
