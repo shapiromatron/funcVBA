@@ -52,6 +52,7 @@ End Enum
 'REQUIRED INPUTS (AND EXAMPLES IN COMMENTS)
 Private pTblRange As Range
 Private pExtendType As TableExtensionType
+Private pWS As Worksheet
 
 '##############
 '# INITIALIZE #
@@ -65,16 +66,19 @@ End Sub
 '##############################
 Public Property Let SetTbl_ExtendAll(TopLeft As Range)
     Set pTblRange = TopLeft
+    Set pWS = TopLeft.Worksheet
     pExtendType = ExtendAll
     UpdateTblRange
 End Property
 Public Property Let SetTbl_Extend(TopLeft As Range)
     Set pTblRange = TopLeft
+    Set pWS = TopLeft.Worksheet
     pExtendType = Extend
     UpdateTblRange
 End Property
 Public Property Let SetTbl_Exact(TableRange As Range)
     Set pTblRange = TableRange
+    Set pWS = TableRange.Worksheet
     pExtendType = Fixed
 End Property
 
@@ -101,9 +105,9 @@ Public Function named_range_all(root_name As String, name_columns As Boolean)
         max_row = Me.get_max_row
         For Each eachHeader In Me.get_header_range
             name = "C_" & root_name & "_" & clean_string(eachHeader.Value)
-            z_Excel.NamedRange_Add pTblRange.Worksheet.Range( _
-                        pTblRange.Worksheet.Cells(min_row, eachHeader.Column), _
-                        pTblRange.Worksheet.Cells(max_row, eachHeader.Column) _
+            z_Excel.NamedRange_Add pWS.Range( _
+                        pWS.Cells(min_row, eachHeader.Column), _
+                        pWS.Cells(max_row, eachHeader.Column) _
                                                             ), name
         Next
     End If
@@ -133,7 +137,7 @@ Public Function save_new_data_row(dict As Variant)
     For Each eachKey In dict
         For Each eachHeader In HeaderRng
             If eachKey = eachHeader.Value Then
-                pTblRange.Worksheet.Cells(outrow, eachHeader.Column) = dict(eachKey)
+                pWS.Cells(outrow, eachHeader.Column) = dict(eachKey)
                 Exit For
             End If
         Next
@@ -175,9 +179,8 @@ End Function
 Public Function get_worksheet() As Worksheet
 'Return the worksheet from the smart table
     UpdateTblRange
-    Set get_worksheet = pTblRange.Worksheet
+    Set get_worksheet = pWS
 End Function
-
 
 Public Function get_max_row() As Long
 'Return max row as long, or -999 if error
@@ -229,9 +232,9 @@ Public Function get_unique_values_in_column(HeaderName As String) As Collection
     If ColumnHeader = -999 Then
         Set SearchRange = Nothing
     Else
-        Set SearchRange = pTblRange.Worksheet.Range( _
-                            Cells(pTblRange.Row, ColumnHeader), _
-                            Cells(get_max_row, ColumnHeader))
+        Set SearchRange = pWS.Range( _
+                            pWS.Cells(pTblRange.Row, ColumnHeader), _
+                            pWS.Cells(Me.get_max_row, ColumnHeader))
     End If
     Set get_unique_values_in_column = ReturnUnique(SearchRange)
 End Function
@@ -370,9 +373,9 @@ Public Function Lookup_ReturnAllMatches(ReturnHeaderName As String, _
     Criteria = ParseCriteria(SearchCriteria)
     If Criteria(0)(0) = -999 Then GoTo IsError
     'For each row
-    For Each eachRow In pTblRange.Offset(1, 0).Rows
-        If CheckForMatch(eachRow.Row, Criteria) = True Then
-            thisCollection.Add pTblRange.Worksheet.Cells(eachRow.Row, ReturnColumn)
+    For Each EachRow In pTblRange.Offset(1, 0).rows
+        If CheckForMatch(EachRow.Row, Criteria) = True Then
+            thisCollection.Add pWS.Cells(EachRow.Row, ReturnColumn)
         End If
     Next
     Set Lookup_ReturnAllMatches = thisCollection
@@ -485,7 +488,7 @@ Private Function CheckForMatch(SearchRow As Long, MatchCriteria As Variant) As B
     Dim i As Integer
     CheckForMatch = True
     For i = 0 To UBound(MatchCriteria(0))
-        If pTblRange.Worksheet.Cells(SearchRow, MatchCriteria(0)(i)) <> MatchCriteria(1)(i) Then
+        If pWS.Cells(SearchRow, MatchCriteria(0)(i)) <> MatchCriteria(1)(i) Then
             CheckForMatch = False
             Exit For
         End If
@@ -510,6 +513,7 @@ IsError:
     ColNum(0) = -999
     ParseCriteria = Array(ColNum, MatchCriteria)
 End Function
+
 
 
 
